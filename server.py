@@ -5,7 +5,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 PORT = 3000
 DB_FILE = "database.json"
-PUBLIC_DIR = "public"
+PUBLIC_DIR = "."
 
 def read_db():
     if not os.path.exists(DB_FILE):
