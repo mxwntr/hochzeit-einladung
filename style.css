@@ -45,6 +45,14 @@ body {
     /* Verhindert seitliches Scrollen (sehr wichtig für Handys!) */
 }
 
+/* Verhindert das Scrollen komplett, solange der Umschlag noch nicht geöffnet ist */
+body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+    position: fixed;
+    width: 100%;
+}
+
 /* =========================================================================
    SCREENS (Ansichten)
    Die Seite besteht aus 2 Screens: 
@@ -73,6 +81,12 @@ body {
     z-index: 100;
     /* Liegt ganz oben drüber */
     background: var(--bg-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Komplett starr, kein Scrollen möglich */
 }
 
 /* Diese Klasse wird per JavaScript hinzugefügt, wenn man auf den Umschlag klickt */
@@ -111,10 +125,12 @@ body {
 
 /* Der pulsierende Text "Zum Öffnen klicken..." */
 .click-hint {
-    margin-top: 40px;
+    position: absolute;
+    bottom: 25px; /* Am unteren Bildschirmrand platziert */
+    left: 0;
+    width: 100%;
     text-align: center;
     animation: pulse 2.5s ease-in-out infinite;
-    position: relative;
     z-index: 20; /* Steht über dem Blumenkranz */
 }
 

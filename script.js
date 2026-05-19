@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     landingScreen.classList.add("hidden");
                     contentScreen.classList.remove("hidden");
                     contentScreen.classList.add("visible");
+                    document.body.classList.remove("no-scroll"); // Scrollen für die Einladung wieder erlauben!
 
                     // Trigger scroll-based animations
                     observeSections();
