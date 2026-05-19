@@ -100,39 +100,33 @@ function observeSections() {
 
 function submitRSVP(status) {
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Gast";
+    let guestName = urlParams.get("name") || "Gast ohne Namen";
 
-    fetch('/api/rsvp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name: guestName, status: status })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById("rsvp-buttons").classList.add("hidden");
-            const responseMsg = document.getElementById("response-msg");
-            responseMsg.classList.remove("hidden");
+    // Buttons verstecken, damit nicht doppelt geklickt wird
+    document.getElementById("rsvp-buttons").classList.add("hidden");
+    const responseMsg = document.getElementById("response-msg");
+    responseMsg.classList.remove("hidden");
+    responseMsg.textContent = "Speichere Antwort...";
 
+    // Prüfen, ob Firebase geladen wurde
+    if (window.firebaseDB && window.firebaseAddDoc) {
+        window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "rsvps"), {
+            name: guestName,
+            status: status,
+            timestamp: window.firebaseServerTimestamp()
+        }).then(() => {
+            // Erfolgreich gespeichert!
             if (status === 'accepted') {
                 responseMsg.textContent = "Wir freuen uns auf euch!";
             } else {
                 responseMsg.textContent = "Schade, ihr werdet uns fehlen!";
             }
-        }
-    })
-    .catch(err => {
-        // Fallback for GitHub Pages without backend
-        document.getElementById("rsvp-buttons").classList.add("hidden");
-        const responseMsg = document.getElementById("response-msg");
-        responseMsg.classList.remove("hidden");
-
-        if (status === 'accepted') {
-            responseMsg.textContent = "Wir freuen uns auf euch!";
-        } else {
-            responseMsg.textContent = "Schade, ihr werdet uns fehlen!";
-        }
-    });
+        }).catch(err => {
+            console.error("Firebase Fehler: ", err);
+            responseMsg.textContent = "Speichern fehlgeschlagen. Bitte sagt uns per WhatsApp Bescheid!";
+        });
+    } else {
+        console.error("Firebase ist nicht initialisiert.");
+        responseMsg.textContent = "Datenbank-Fehler. Bitte sagt uns per WhatsApp Bescheid!";
+    }
 }
