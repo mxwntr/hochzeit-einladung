@@ -345,13 +345,13 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(100vw, 430px); /* Größer als der Umschlag, um ihn als Kranz zu umrahmen */
+    width: min(130vw, 560px); /* Deutlich vergrößert, damit der Kranz hinter dem Umschlag hervorragt */
     height: auto;
     z-index: 1; /* Hinter dem Umschlag */
     pointer-events: none;
     mix-blend-mode: multiply; /* Blendet weißen Hintergrund aus */
     filter: grayscale(100%) contrast(1.1) brightness(1.1); /* Passt zum eleganten S/W-Stil */
-    opacity: 0.9;
+    opacity: 0.95; /* Etwas deckender */
 }
 
 .photo-envelope {
