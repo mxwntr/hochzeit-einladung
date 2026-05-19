@@ -8,32 +8,34 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <audio id="bg-music" loop>
-        <source
-            src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3"
-            type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3" type="audio/mpeg">
     </audio>
 
     <!-- LANDING SCREEN (Umschlag mit Wachssiegel) -->
     <div id="landing-screen" class="screen active">
         <div class="envelope-container" id="envelope-wrapper">
             <div class="envelope-3d">
+                <!-- Inner card peeking out -->
+                <div class="envelope-inner-card"></div>
+                <div class="flap left"></div>
+                <div class="flap right"></div>
+                <div class="flap bottom"></div>
                 <div class="flap top" id="flap">
+                    <!-- Wax Seal -->
                     <div class="wax-seal" id="wax-seal">
-                        <span class="seal-initial">M&N</span>
+                        <div class="seal-ring-outer"></div>
+                        <div class="seal-ring-inner"></div>
+                        <div class="seal-dots"></div>
+                        <span class="seal-initial">M<span class="seal-amp">&</span>N</span>
                     </div>
                 </div>
-                <div class="flap right"></div>
-                <div class="flap left"></div>
-                <div class="flap bottom"></div>
             </div>
         </div>
         <div class="click-hint">
@@ -41,79 +43,95 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT SCREEN (Collage-Design) -->
+    <!-- MAIN CONTENT SCREEN -->
     <div id="content-screen" class="screen hidden">
-        <div class="collage-container">
+        <div class="invitation-scroll">
 
-            <!-- Hintergrund Blumen -->
-            <img src="07.webp" class="flower flower-top-right" alt="Blume">
-            <img src="08.webp" class="flower flower-mid-left" alt="Blume">
-            <img src="04.webp" class="flower flower-bottom-right" alt="Blume">
-
-            <!-- Oben: Offener Umschlag mit Landschaft -->
-            <div class="collage-element open-envelope">
-                <div class="envelope-back"></div>
-                <div class="envelope-landscape">
-                    <!-- Platzhalter-Bild. Kann im images Ordner ausgetauscht werden! -->
-                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80"
-                        alt="Landschaft">
+            <!-- Sektion 1: Umschlag mit Paar-Foto -->
+            <section class="section envelope-photo-section">
+                <div class="photo-envelope">
+                    <div class="photo-envelope-back"></div>
+                    <div class="photo-envelope-image">
+                        <!-- Lege euer Foto als images/paar.webp ab! -->
+                        <img src="images/paar.webp" alt="Max & Nadja" onerror="this.src='https://images.unsplash.com/photo-1529634597503-139d3726fed5?auto=format&fit=crop&w=600&q=80'; this.style.filter='grayscale(100%)'">
+                    </div>
+                    <div class="photo-envelope-flap"></div>
                 </div>
-                <div class="envelope-flaps"></div>
-            </div>
+                <!-- Deko-Blume -->
+                <img src="07.webp" class="deco-flower deco-flower-1" alt="">
+            </section>
 
-            <!-- Mitte Links: Schallplatte -->
-            <div class="collage-element vinyl-record" id="vinyl-btn">
-                <div class="vinyl-grooves"></div>
-                <div class="vinyl-label">
-                    <span class="vinyl-text">ZUM HÖREN KLICKEN</span>
-                    <div class="play-btn">▶</div>
-                </div>
-            </div>
-
-            <!-- Mitte Rechts: Datum & Location Karte -->
-            <div class="collage-element date-card">
-                <div class="inner-border">
-                    <div class="date-number">26</div>
-                    <div class="date-month">August</div>
-                    <div class="date-year">2026</div>
-                    <div class="date-details">
-                        UM 10 UHR<br>
-                        STANDESAMT RATINGEN<br><br>
-                        ANSCHLIESSEND<br>
-                        RESTAURANTE MILANO<br>
-                        RATINGEN LINTORF
+            <!-- Sektion 2: Schallplatte -->
+            <section class="section vinyl-section">
+                <div class="vinyl-record" id="vinyl-btn">
+                    <div class="vinyl-grooves"></div>
+                    <div class="vinyl-label">
+                        <span class="vinyl-text">ZUM HÖREN<br>KLICKEN</span>
+                        <div class="play-btn">▶</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Mitte Links: Bogen-Karte -->
-            <div class="collage-element arch-card">
-                <div class="arch-content">
-                    <p class="arch-subtitle">WIR LADEN EUCH EIN<br>ZUR HOCHZEIT VON</p>
-                    <h1 class="arch-names">Max<br><span class="and">&</span><br>Nadja</h1>
-                    <p id="guest-name-display" class="guest-name"></p>
+            <!-- Sektion 3: Namens-Karte (Bogen) -->
+            <section class="section names-section">
+                <img src="08.webp" class="deco-flower deco-flower-2" alt="">
+                <div class="arch-card">
+                    <div class="arch-content">
+                        <p class="arch-subtitle">WIR LADEN EUCH HERZLICH EIN<br>ZUR HOCHZEIT VON</p>
+                        <h1 class="arch-names">Max<br><span class="and">&</span><br>Nadja</h1>
+                        <p id="guest-name-display" class="guest-name"></p>
+                    </div>
                 </div>
-                <!-- Blumen-Overlay -->
-                <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="arch-flower"
-                    alt="Blume">
-            </div>
+            </section>
 
-            <!-- Unten Links: Monogramm -->
-            <div class="collage-element monogram-oval">
-                <div class="oval-inner">
-                    <span class="monogram-letters">M N</span>
+            <!-- Sektion 4: Datum & Location -->
+            <section class="section date-section">
+                <div class="date-card">
+                    <div class="inner-border">
+                        <div class="date-number">26</div>
+                        <div class="date-month">August</div>
+                        <div class="date-year">2026</div>
+                        <div class="divider"></div>
+                        <div class="date-details">
+                            UM 10 UHR<br>
+                            STANDESAMT RATINGEN<br><br>
+                            ANSCHLIESSEND<br>
+                            RESTAURANTE MILANO<br>
+                            RATINGEN LINTORF
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <img src="04.webp" class="deco-flower deco-flower-3" alt="">
+            </section>
 
-            <!-- Unten Rechts: RSVP Bereich -->
-            <div class="collage-element rsvp-section">
-                <p class="rsvp-title">Um Antwort<br><span class="rsvp-script">wird gebeten</span></p>
-                <div class="rsvp-buttons" id="rsvp-buttons">
-                    <button onclick="submitRSVP('accepted')">Zusagen</button>
-                    <button onclick="submitRSVP('declined')">Absagen</button>
+            <!-- Sektion 5: Monogramm -->
+            <section class="section monogram-section">
+                <div class="monogram-oval">
+                    <div class="oval-inner">
+                        <span class="monogram-letters">M  N</span>
+                    </div>
                 </div>
-                <p id="response-msg" class="response-msg hidden"></p>
-            </div>
+            </section>
+
+            <!-- Sektion 6: RSVP -->
+            <section class="section rsvp-section-wrapper">
+                <div class="rsvp-card">
+                    <div class="rsvp-seal">M&N</div>
+                    <p class="rsvp-title">Um Antwort</p>
+                    <p class="rsvp-script">wird gebeten</p>
+                    <div class="rsvp-buttons" id="rsvp-buttons">
+                        <button onclick="submitRSVP('accepted')">Zusagen</button>
+                        <button onclick="submitRSVP('declined')">Absagen</button>
+                    </div>
+                    <p id="response-msg" class="response-msg hidden"></p>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>MIT LIEBE & DANKBARKEIT</p>
+                <p class="footer-names">Max & Nadja</p>
+            </footer>
 
         </div>
     </div>
