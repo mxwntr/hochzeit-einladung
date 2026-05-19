@@ -96,20 +96,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).catch(err => console.error("Error updating status:", err));
             }
 
-            // After flap opens, transition the screens
+            // After flap opens (800ms), transition the screens
             setTimeout(() => {
                 landingScreen.classList.add("fade-out");
+                
+                // Sofort einblenden und Scrollen freigeben, während die Landingpage ausblendet
+                contentScreen.classList.remove("hidden");
+                contentScreen.classList.add("visible");
+                document.body.classList.remove("no-scroll");
+
+                // Scroll-Animationen direkt triggern
+                observeSections();
 
                 setTimeout(() => {
                     landingScreen.classList.add("hidden");
-                    contentScreen.classList.remove("hidden");
-                    contentScreen.classList.add("visible");
-                    document.body.classList.remove("no-scroll"); // Scrollen für die Einladung wieder erlauben!
-
-                    // Trigger scroll-based animations
-                    observeSections();
-                }, 1000);
-            }, 1000);
+                }, 1200); // Entspricht der Fade-Out Dauer (1.2s)
+            }, 800);
         });
     }
 
