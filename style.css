@@ -252,7 +252,7 @@ body {
 /* Die Initialen, die über dem Siegel-Bild liegen */
 .seal-initial {
     position: relative;
-    top: -5px;
+    top: -4px;
     /* <--- Negativer Wert schiebt die Schrift nach OBEN */
     left: 0px;
     /* <--- Schiebt die Schrift nach links/rechts */
@@ -261,7 +261,7 @@ body {
     /* Schwarze Schrift auf rotem Wachs */
     font-family: var(--font-serif);
     font-size: 0.9rem;
-    letter-spacing: 1px;
+    letter-spacing: -3px;
     text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
     /* Leichter weißer Schein zur Lesbarkeit */
 }
@@ -424,6 +424,8 @@ body {
 /* --- 2. Sektion: Schallplatte (Musik-Player) --- */
 .vinyl-section {
     margin-bottom: 30px;
+    overflow: visible; /* WICHTIG: Verhindert, dass der Schatten abgeschnitten wird! */
+    padding: 20px;     /* Gibt dem Schatten etwas Platz zum "Atmen" */
 }
 
 .vinyl-record {
