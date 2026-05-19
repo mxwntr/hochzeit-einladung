@@ -342,8 +342,8 @@ function submitRSVP(status, meal = "", guestsCount = 1, attendingNames = "") {
             // Erfolgreich gespeichert!
             if (status === 'accepted') {
                 responseMsg.textContent = "Wir freuen uns auf euch!";
-                const calendarBtn = document.getElementById("calendar-btn");
-                if (calendarBtn) calendarBtn.classList.remove("hidden");
+                const calendarOptions = document.getElementById("calendar-options");
+                if (calendarOptions) calendarOptions.classList.remove("hidden");
             } else {
                 responseMsg.textContent = "Schade, ihr werdet uns fehlen!";
             }
@@ -357,9 +357,15 @@ function submitRSVP(status, meal = "", guestsCount = 1, attendingNames = "") {
     }
 }
 
-// Kalender-Funktion: Lädt die .ics Datei herunter, die auf allen Geräten (iOS & Android) direkt den nativen Kalender öffnet
+// Kalender-Funktion: Lädt die .ics Datei herunter (am besten für iOS/Apple & Outlook)
 function addToCalendar() {
     window.location.href = "invite.ics";
+}
+
+// Google Kalender-Funktion (öffnet den Google Kalender direkt im Web/App)
+function addToGoogleCalendar() {
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Hochzeit+von+Max+%26+Nadja&dates=20260826T080000Z/20260826T220000Z&details=Wir+heiraten%21%0A%0A10%3A00+Uhr%3A+Standesamt+Ratingen+%28Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%29%0AAnschlie%C3%9Fend%3A+Ristorante+Milano+%28Speestra%C3%9Fe+9%2C+40885+Ratingen%29%0A%0AWir+freuen+uns+sehr+auf+euch%21&location=Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%2C+Deutschland";
+    window.open(url, "_blank");
 }
 
 // Maps-Funktion: Öffnet die native Maps-App (Apple Maps auf iOS, Google Maps auf Android/PC) ohne Login-Zwang
@@ -385,3 +391,4 @@ function openMaps(location) {
 
 window.openMaps = openMaps;
 window.addToCalendar = addToCalendar;
+window.addToGoogleCalendar = addToGoogleCalendar;

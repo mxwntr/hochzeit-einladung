@@ -1038,32 +1038,24 @@ body.no-scroll {
     font-size: 1.5rem;
 }
 
-/* Kalender-Eintrag Button */
-.calendar-btn {
-    display: inline-block;
-    background: var(--black);
-    color: #fff;
-    border: none;
-    padding: 12px 24px;
+.calendar-btn-option {
+    background: transparent;
+    border: 1px solid var(--black);
+    padding: 12px 10px;
     font-family: var(--font-sans);
-    font-size: 0.75rem;
-    letter-spacing: 1.5px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s;
     text-transform: uppercase;
-    margin-top: 20px;
     border-radius: 4px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: var(--black);
+    text-align: center;
 }
 
-.calendar-btn:hover {
-    background: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
-
-.calendar-btn:active {
-    transform: translateY(0);
+.calendar-btn-option:hover {
+    background: var(--black);
+    color: #fff;
 }
 
 

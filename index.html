@@ -209,8 +209,13 @@
                     </div>
 
                     <p id="response-msg" class="response-msg hidden"></p>
-                    <button id="calendar-btn" class="calendar-btn hidden" onclick="addToCalendar()">In den
-                        Kalender eintragen</button>
+                    <div id="calendar-options" class="hidden" style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                        <p style="font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; font-weight: bold; margin-bottom: 2px;">In den Kalender eintragen:</p>
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <button onclick="addToCalendar()" class="calendar-btn-option" style="flex: 1;">Apple / Outlook</button>
+                            <button onclick="addToGoogleCalendar()" class="calendar-btn-option" style="flex: 1;">Google Kalender</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
