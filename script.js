@@ -78,7 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (bgMusic && !isPlaying) {
                 bgMusic.volume = 0.5;
                 bgMusic.play().then(() => {
-                    if (vinylBtn) vinylBtn.classList.add("playing");
+                    if (vinylBtn) {
+                        vinylBtn.classList.add("playing");
+                        const playBtn = vinylBtn.querySelector(".play-btn");
+                        if (playBtn) playBtn.textContent = "❚❚";
+                    }
                     isPlaying = true;
                 }).catch(e => console.log("Auto-play blocked by browser:", e));
             }
@@ -111,17 +115,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // Play/Pause music when clicking vinyl
     if (vinylBtn && bgMusic) {
         vinylBtn.addEventListener("click", () => {
+            const playBtn = vinylBtn.querySelector(".play-btn");
             if (isPlaying) {
                 bgMusic.pause();
                 vinylBtn.classList.remove("playing");
+                if (playBtn) playBtn.textContent = "▶";
                 isPlaying = false;
             } else {
                 bgMusic.volume = 0.5;
                 bgMusic.play().then(() => {
                     vinylBtn.classList.add("playing");
+                    if (playBtn) playBtn.textContent = "❚❚";
                     isPlaying = true;
                 }).catch(e => console.log("Audio play failed:", e));
             }
+        });
+
+        // Event listener für das Ende des Lieds
+        bgMusic.addEventListener("ended", () => {
+            vinylBtn.classList.remove("playing");
+            const playBtn = vinylBtn.querySelector(".play-btn");
+            if (playBtn) playBtn.textContent = "▶";
+            isPlaying = false;
         });
     }
 });

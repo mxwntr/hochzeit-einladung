@@ -357,20 +357,22 @@ body {
 /* Rahmen für das Foto */
 .photo-envelope-image {
     position: absolute;
-    top: 0;
-    left: 10%;
-    width: 80%;
-    height: 75%;
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-    /* Schneidet das Foto als Dreieck zu */
+    top: -25px; /* Etwas nach oben geschoben, damit es weiter herausragt */
+    left: 5%;
+    width: 90%;
+    height: 85%;
+    /* clip-path entfernt, damit es rechteckig bleibt und nicht abgeschnitten wird */
     z-index: 1;
     overflow: hidden;
+    border-radius: 6px; /* Abgerundete Ecken für den Karten-Look */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .photo-envelope-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 30%; /* Schiebt das Bild leicht nach unten, damit Köpfe/Körper besser sichtbar sind */
     filter: grayscale(100%) contrast(1.05);
     /* Macht das Foto schwarz-weiß */
 }
@@ -423,16 +425,18 @@ body {
 
 /* --- 2. Sektion: Schallplatte (Musik-Player) --- */
 .vinyl-section {
-    margin-bottom: 30px;
+    position: relative;
+    margin: calc(-1 * min(25vw, 100px)) auto 15px; /* Dynamischer negativer Margin zieht sie halb über den Umschlag */
+    width: min(80vw, 340px); /* Selbe Breite wie der Umschlag */
+    display: flex;
+    justify-content: flex-end; /* Richtet die Schallplatte am rechten Rand des Umschlags aus */
+    z-index: 10; /* Setzt sie über den Umschlag */
     overflow: visible;
-    /* WICHTIG: Verhindert, dass der Schatten abgeschnitten wird! */
-    padding: 20px;
-    /* Gibt dem Schatten etwas Platz zum "Atmen" */
 }
 
 .vinyl-record {
-    width: min(50vw, 200px);
-    height: min(50vw, 200px);
+    width: min(48vw, 190px);
+    height: min(48vw, 190px);
     border-radius: 50%;
     /* Macht es rund */
     background: #111;
@@ -443,11 +447,23 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 10px; /* Versatz nach links, damit sie elegant unten rechts auf der Kante sitzt */
 }
 
 .vinyl-record:hover {
     transform: scale(1.05);
     /* Leichter Zoom beim Hover */
+}
+
+/* Gesamte Scheibe inklusive Label, die sich dreht */
+.vinyl-disc {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
 }
 
 /* Die Rillen der Schallplatte */
@@ -503,8 +519,8 @@ body {
     }
 }
 
-.playing .vinyl-grooves {
-    animation: spin 3s linear infinite;
+.playing .vinyl-disc {
+    animation: spin 6s linear infinite; /* Etwas langsameres, eleganteres Drehen */
 }
 
 
