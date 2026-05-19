@@ -708,6 +708,8 @@ body.no-scroll {
     transition: all 0.3s;
     border-radius: 4px;
     margin-bottom: 5px;
+    cursor: pointer;
+    outline: none;
 }
 
 .maps-btn:hover {

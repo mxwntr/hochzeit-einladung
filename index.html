@@ -12,8 +12,8 @@
         href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
         rel="stylesheet">
 
-    <!-- Cache-Buster hinzugefügt (?v=21) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=21">
+    <!-- Cache-Buster hinzugefügt (?v=22) damit Handys das neue CSS laden! -->
+    <link rel="stylesheet" href="style.css?v=22">
 </head>
 
 <body class="no-scroll">
@@ -109,14 +109,14 @@
                             <span class="detail-label">UM 10 UHR</span>
                             <span class="location-name">STANDESAMT RATINGEN</span>
                             <span class="location-address">Minoritenstraße 2a, 40878 Ratingen</span>
-                            <a href="https://maps.google.com/?q=Standesamt+Ratingen,+Minoritenstraße+2a,+40878+Ratingen" target="_blank" class="maps-btn">Auf Google Maps anzeigen</a>
+                            <button onclick="openMaps('standesamt')" class="maps-btn">Auf Karte anzeigen</button>
                             
                             <div class="card-spacer"></div>
                             
                             <span class="detail-label">ANSCHLIESSEND</span>
                             <span class="location-name">RISTORANTE MILANO</span>
                             <span class="location-address">Speestraße 9, 40885 Ratingen</span>
-                            <a href="https://maps.google.com/?q=Ristorante+Milano,+Speestraße+9,+40885+Ratingen" target="_blank" class="maps-btn">Auf Google Maps anzeigen</a>
+                            <button onclick="openMaps('milano')" class="maps-btn">Auf Karte anzeigen</button>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=21"></script>
+    <script src="script.js?v=22"></script>
 </body>
 
 </html>

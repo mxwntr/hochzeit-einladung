@@ -287,19 +287,31 @@ function submitRSVP(status, meal = "", guestsCount = 1) {
     }
 }
 
-// Kalender-Funktion: Öffnet den Kalender direkt (ohne manuellen Download-Umweg)
+// Kalender-Funktion: Lädt die .ics Datei herunter, die auf allen Geräten (iOS & Android) direkt den nativen Kalender öffnet
 function addToCalendar() {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    if (isAndroid) {
-        // Für Android-Nutzer direkt das Event im Google Kalender erstellen (öffnet Browser oder App)
-        const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-            "&text=" + encodeURIComponent("Hochzeit von Max & Nadja") +
-            "&dates=20260826T080000Z/20260826T220000Z" +
-            "&details=" + encodeURIComponent("Wir heiraten!\n\n10:00 Uhr: Standesamt Ratingen (Minoritenstraße 2a, 40878 Ratingen)\nAnschließend: Ristorante Milano (Speestraße 9, 40885 Ratingen)\n\nWir freuen uns sehr auf euch!") +
-            "&location=" + encodeURIComponent("Minoritenstraße 2a, 40878 Ratingen, Deutschland");
-        window.open(googleCalendarUrl, "_blank");
-    } else {
-        // Für iOS (iPhone/iPad) und Desktop lädt die fertige .ics Datei herunter und öffnet direkt den nativen Kalender
-        window.location.href = "invite.ics";
-    }
+    window.location.href = "invite.ics";
 }
+
+// Maps-Funktion: Öffnet die native Maps-App (Apple Maps auf iOS, Google Maps auf Android/PC) ohne Login-Zwang
+function openMaps(location) {
+    const isIOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+    let address = "";
+    if (location === 'standesamt') {
+        address = "Minoritenstraße 2a, 40878 Ratingen, Germany";
+    } else {
+        address = "Speestraße 9, 40885 Ratingen, Germany";
+    }
+    
+    let url = "";
+    if (isIOS) {
+        // Öffnet Apple Maps App direkt auf Apple Geräten
+        url = "https://maps.apple.com/?q=" + encodeURIComponent(address);
+    } else {
+        // Die standardisierte Google Maps API-URL startet auf Android direkt die Maps-App und verlangt KEIN Login
+        url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+    }
+    window.open(url, "_blank");
+}
+
+window.openMaps = openMaps;
+window.addToCalendar = addToCalendar;
