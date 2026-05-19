@@ -24,7 +24,166 @@ body {
     justify-content: center;
     min-height: 100vh;
     overflow-x: hidden;
-    padding: 20px 0;
+    padding: 0; /* Changed from 20px 0 so the landing screen fills everything */
+}
+
+/* Screen Management */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+}
+
+#landing-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background: var(--bg-color);
+}
+
+#landing-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.05);
+}
+
+#content-screen {
+    z-index: 10;
+    background: var(--bg-color);
+    position: relative;
+    padding-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.visible {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+
+/* Typography for Landing */
+.click-hint {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.script-text-small {
+    font-family: var(--font-script);
+    font-size: 2.5rem;
+    color: #444;
+}
+
+/* 3D ENVELOPE (LANDING SCREEN) */
+.envelope-container {
+    perspective: 1500px;
+    cursor: pointer;
+    position: relative;
+    width: 350px;
+    height: 220px;
+    margin: 0 auto;
+}
+
+.envelope-3d {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #fdfdfd;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-radius: 2px;
+}
+
+.flap {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+}
+
+.flap.left {
+    border-left: 175px solid #f9f9f9;
+    border-top: 110px solid transparent;
+    border-bottom: 110px solid transparent;
+    z-index: 4;
+}
+
+.flap.right {
+    border-right: 175px solid #f9f9f9;
+    border-top: 110px solid transparent;
+    border-bottom: 110px solid transparent;
+    right: 0;
+    z-index: 4;
+}
+
+.flap.bottom {
+    border-bottom: 110px solid #ffffff;
+    border-left: 175px solid transparent;
+    border-right: 175px solid transparent;
+    bottom: 0;
+    z-index: 5;
+}
+
+.flap.top {
+    border-top: 120px solid #f4f4f4;
+    border-left: 175px solid transparent;
+    border-right: 175px solid transparent;
+    top: 0;
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 6;
+}
+
+.envelope-container.open .flap.top {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+.wax-seal {
+    position: absolute;
+    top: -35px;
+    left: calc(50% - 30px);
+    width: 60px;
+    height: 60px;
+    background: #111;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 -3px 8px rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s 0.6s, transform 0.3s;
+}
+
+.wax-seal::after {
+    content: '';
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border: 1px dashed rgba(255,255,255,0.4);
+    border-radius: 50%;
+}
+
+.seal-initial {
+    color: #fff;
+    font-family: var(--font-script);
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.envelope-container.open .wax-seal {
+    opacity: 0;
 }
 
 /* The scalable collage container */
@@ -32,7 +191,7 @@ body {
     position: relative;
     width: 100%;
     max-width: 550px;
-    height: 1100px; /* fixed proportion for exact placement */
+    height: 1100px;
     background-color: transparent;
 }
 
@@ -176,7 +335,7 @@ body {
 
 .vinyl-text {
     font-family: var(--font-serif);
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     font-weight: bold;
     text-transform: uppercase;
     text-align: center;
@@ -233,11 +392,11 @@ body {
 .date-year {
     font-family: var(--font-serif);
     font-size: 2rem;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .date-details {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     letter-spacing: 1.5px;
     line-height: 1.8;
 }
@@ -339,7 +498,7 @@ body {
 
 .rsvp-title {
     font-family: var(--font-serif);
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 2px;
 }

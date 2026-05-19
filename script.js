@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const envelopeWrapper = document.getElementById("envelope-wrapper");
+    const landingScreen = document.getElementById("landing-screen");
+    const contentScreen = document.getElementById("content-screen");
+    
     const guestNameDisplay = document.getElementById("guest-name-display");
     const bgMusic = document.getElementById("bg-music");
     const vinylBtn = document.getElementById("vinyl-btn");
@@ -9,19 +13,41 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Formatting the name
     if (guestNameDisplay && guestName) {
-        guestNameDisplay.textContent = `Liebe(r) ${guestName},`;
-        
-        // Notify server that it was opened (if name is provided)
-        fetch('/api/status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: guestName, opened: true })
-        }).catch(err => console.error("Error updating status:", err));
+        guestNameDisplay.textContent = `Für ${guestName}`;
     }
 
+    let opened = false;
     let isPlaying = false;
+
+    // Open envelope event
+    if (envelopeWrapper) {
+        envelopeWrapper.addEventListener("click", () => {
+            if (opened) return;
+            
+            envelopeWrapper.classList.add("open");
+            opened = true;
+
+            // Notify server that it was opened (if name is provided)
+            if (guestName) {
+                fetch('/api/status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: guestName, opened: true })
+                }).catch(err => console.error("Error updating status:", err));
+            }
+
+            // After flap opens (approx 800ms), transition the screens
+            setTimeout(() => {
+                landingScreen.classList.add("fade-out");
+                
+                setTimeout(() => {
+                    landingScreen.classList.add("hidden");
+                    contentScreen.classList.remove("hidden");
+                    contentScreen.classList.add("visible");
+                }, 1000); // Wait for fade out
+            }, 1000); // Wait for flap to open
+        });
+    }
 
     // Play/Pause music when clicking vinyl
     if (vinylBtn && bgMusic) {

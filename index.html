@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hochzeitseinladung</title>
+    <title>Hochzeitseinladung - Max & Nadja</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fonts: Italiana for elegant caps, Pinyon Script for cursive, Montserrat for sans -->
     <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
@@ -17,73 +16,98 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="collage-container">
-        
-        <!-- Background Flowers -->
-        <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-top-right" alt="Flower">
-        <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="flower flower-mid-left" alt="Flower">
-        <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-bottom-right" alt="Flower">
-
-        <!-- Top Open Envelope with Landscape -->
-        <div class="collage-element open-envelope">
-            <div class="envelope-back"></div>
-            <div class="envelope-landscape">
-                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80" alt="Landscape">
-            </div>
-            <div class="envelope-flaps"></div>
-        </div>
-
-        <!-- Vinyl Record -->
-        <div class="collage-element vinyl-record" id="vinyl-btn">
-            <div class="vinyl-grooves"></div>
-            <div class="vinyl-label">
-                <span class="vinyl-text">CLICK TO LISTEN</span>
-                <div class="play-btn">▶</div>
+    <!-- LANDING SCREEN (Umschlag mit Wachssiegel) -->
+    <div id="landing-screen" class="screen active">
+        <div class="envelope-container" id="envelope-wrapper">
+            <div class="envelope-3d">
+                <div class="flap top" id="flap">
+                    <div class="wax-seal" id="wax-seal">
+                        <span class="seal-initial">M&N</span>
+                    </div>
+                </div>
+                <div class="flap right"></div>
+                <div class="flap left"></div>
+                <div class="flap bottom"></div>
             </div>
         </div>
+        <div class="click-hint">
+            <span class="script-text-small">Zum Öffnen klicken...</span>
+        </div>
+    </div>
 
-        <!-- Date Card (Rectangle) -->
-        <div class="collage-element date-card">
-            <div class="inner-border">
-                <div class="date-number">27</div>
-                <div class="date-month">August</div>
-                <div class="date-year">2027</div>
-                <div class="date-details">
-                    AT 4:00PM<br>
-                    SCHLOSS SCHÖNBRUNN,<br>
-                    WIEN
+    <!-- MAIN CONTENT SCREEN (Collage-Design) -->
+    <div id="content-screen" class="screen hidden">
+        <div class="collage-container">
+            
+            <!-- Hintergrund Blumen -->
+            <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-top-right" alt="Blume">
+            <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="flower flower-mid-left" alt="Blume">
+            <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-bottom-right" alt="Blume">
+
+            <!-- Oben: Offener Umschlag mit Landschaft -->
+            <div class="collage-element open-envelope">
+                <div class="envelope-back"></div>
+                <div class="envelope-landscape">
+                    <!-- Platzhalter-Bild. Kann im images Ordner ausgetauscht werden! -->
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80" alt="Landschaft">
+                </div>
+                <div class="envelope-flaps"></div>
+            </div>
+
+            <!-- Mitte Links: Schallplatte -->
+            <div class="collage-element vinyl-record" id="vinyl-btn">
+                <div class="vinyl-grooves"></div>
+                <div class="vinyl-label">
+                    <span class="vinyl-text">ZUM HÖREN KLICKEN</span>
+                    <div class="play-btn">▶</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Arch Card -->
-        <div class="collage-element arch-card">
-            <div class="arch-content">
-                <p class="arch-subtitle">PLEASE JOIN US FOR<br>THE WEDDING OF</p>
-                <h1 class="arch-names">Max<br><span class="and">&</span><br>Julia</h1>
-                <p id="guest-name-display" class="guest-name"></p>
+            <!-- Mitte Rechts: Datum & Location Karte -->
+            <div class="collage-element date-card">
+                <div class="inner-border">
+                    <div class="date-number">26</div>
+                    <div class="date-month">August</div>
+                    <div class="date-year">2026</div>
+                    <div class="date-details">
+                        UM 10 UHR<br>
+                        STANDESAMT RATINGEN<br><br>
+                        ANSCHLIESSEND<br>
+                        RESTAURANTE MILANO<br>
+                        RATINGEN LINTORF
+                    </div>
+                </div>
             </div>
-            <!-- Small flower overlay on arch -->
-            <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="arch-flower" alt="Flower">
-        </div>
 
-        <!-- Monogram Oval -->
-        <div class="collage-element monogram-oval">
-            <div class="oval-inner">
-                <span class="monogram-letters">M J</span>
+            <!-- Mitte Links: Bogen-Karte -->
+            <div class="collage-element arch-card">
+                <div class="arch-content">
+                    <p class="arch-subtitle">WIR LADEN EUCH EIN<br>ZUR HOCHZEIT VON</p>
+                    <h1 class="arch-names">Max<br><span class="and">&</span><br>Nadja</h1>
+                    <p id="guest-name-display" class="guest-name"></p>
+                </div>
+                <!-- Blumen-Overlay -->
+                <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="arch-flower" alt="Blume">
             </div>
-        </div>
 
-        <!-- RSVP Section (Replacing bottom envelope for functionality) -->
-        <div class="collage-element rsvp-section">
-            <p class="rsvp-title">Kindly<br><span class="rsvp-script">RSVP</span></p>
-            <div class="rsvp-buttons" id="rsvp-buttons">
-                <button onclick="submitRSVP('accepted')">Accept</button>
-                <button onclick="submitRSVP('declined')">Decline</button>
+            <!-- Unten Links: Monogramm -->
+            <div class="collage-element monogram-oval">
+                <div class="oval-inner">
+                    <span class="monogram-letters">M N</span>
+                </div>
             </div>
-            <p id="response-msg" class="response-msg hidden"></p>
-        </div>
 
+            <!-- Unten Rechts: RSVP Bereich -->
+            <div class="collage-element rsvp-section">
+                <p class="rsvp-title">Um Antwort<br><span class="rsvp-script">wird gebeten</span></p>
+                <div class="rsvp-buttons" id="rsvp-buttons">
+                    <button onclick="submitRSVP('accepted')">Zusagen</button>
+                    <button onclick="submitRSVP('declined')">Absagen</button>
+                </div>
+                <p id="response-msg" class="response-msg hidden"></p>
+            </div>
+
+        </div>
     </div>
 
     <script src="script.js"></script>
