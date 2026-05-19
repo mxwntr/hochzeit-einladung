@@ -27,6 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
             envelopeWrapper.classList.add("open");
             opened = true;
 
+            // Musik direkt beim Öffnen des Umschlags starten
+            if (bgMusic && !isPlaying) {
+                bgMusic.volume = 0.5;
+                bgMusic.play().then(() => {
+                    if (vinylBtn) vinylBtn.classList.add("playing");
+                    isPlaying = true;
+                }).catch(e => console.log("Auto-play blocked by browser:", e));
+            }
+
             // Notify server that it was opened
             if (guestName) {
                 fetch('/api/status', {
