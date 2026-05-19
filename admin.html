@@ -100,6 +100,7 @@
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
         .status-accepted {
@@ -216,18 +217,10 @@
         }
 
         .generator-form {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
+            display: flex;
+            flex-direction: column;
             gap: 15px;
-            align-items: center;
             margin-bottom: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .generator-form {
-                grid-template-columns: 1fr;
-                align-items: stretch;
-            }
         }
 
         .generator-form input[type="text"] {
@@ -330,20 +323,26 @@
         <div class="generator-card">
             <h2>Link Generator</h2>
             <div class="generator-form">
-                <!-- Einzelgast Feld -->
-                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()">
-                
-                <!-- Paargast Felder (standardmäßig versteckt) -->
-                <div id="couple-names-inputs" class="hidden" style="display: none; gap: 10px; width: 100%;">
-                    <input type="text" id="guest-name1-input" placeholder="Name Person 1 (z.B. Erika)" style="flex: 1; min-width: 0;">
-                    <input type="text" id="guest-name2-input" placeholder="Name Person 2 (z.B. Max)" style="flex: 1; min-width: 0;">
+                <!-- Zeile 1: Name(n) Eingabefelder -->
+                <div style="width: 100%;">
+                    <!-- Einzelgast Feld -->
+                    <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()">
+                    
+                    <!-- Paargast Felder (standardmäßig versteckt) -->
+                    <div id="couple-names-inputs" class="hidden" style="display: none; gap: 15px; width: 100%;">
+                        <input type="text" id="guest-name1-input" placeholder="Name Person 1 (z.B. Erika)" style="flex: 1; min-width: 0;">
+                        <input type="text" id="guest-name2-input" placeholder="Name Person 2 (z.B. Max)" style="flex: 1; min-width: 0;">
+                    </div>
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap; user-select: none;">
-                    <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
-                    <label for="is-couple-checkbox" style="font-size: 0.85rem; cursor: pointer;">2 Personen (Paar)</label>
+                <!-- Zeile 2: Checkbox & Button Bar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 8px; user-select: none;">
+                        <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                        <label for="is-couple-checkbox" style="font-size: 0.9rem; cursor: pointer; color: #444; font-weight: 500;">2 Personen (Paar) einladen</label>
+                    </div>
+                    <button onclick="generateLink()" style="padding: 12px 25px; min-width: 180px;">Link erstellen</button>
                 </div>
-                <button onclick="generateLink()">Link erstellen</button>
             </div>
             <div id="result-wrapper" class="hidden">
                 <div class="result-box">
@@ -384,21 +383,23 @@
                 </div>
             </div>
  
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Hauptgang</th>
-                        <th>Datum</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <tr>
-                        <td colspan="4" class="loading">Lade Daten aus Firebase...</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="width: 100%; overflow-x: auto;">
+                <table style="width: 100%; min-width: 650px; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 120px; width: 25%;">Name</th>
+                            <th style="min-width: 130px; width: 20%;">Status</th>
+                            <th style="min-width: 250px; width: 35%;">Hauptgang</th>
+                            <th style="min-width: 150px; width: 20%;">Datum</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="4" class="loading">Lade Daten aus Firebase...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -574,7 +575,15 @@
 
                 // Hauptgang
                 const tdMeal = document.createElement("td");
-                tdMeal.textContent = data.status === "accepted" ? (data.meal || "Nicht gewählt") : "-";
+                if (data.status === "accepted" && data.meal) {
+                    if (data.meal.includes(" | ")) {
+                        tdMeal.innerHTML = data.meal.split(" | ").map(item => `<div style="margin-bottom: 4px; line-height: 1.3;">${item}</div>`).join("");
+                    } else {
+                        tdMeal.textContent = data.meal;
+                    }
+                } else {
+                    tdMeal.textContent = data.status === "accepted" ? "Nicht gewählt" : "-";
+                }
                 tr.appendChild(tdMeal);
 
                 // Datum
