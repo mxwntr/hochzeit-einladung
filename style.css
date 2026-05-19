@@ -334,6 +334,24 @@ body {
 .envelope-photo-section {
     overflow: visible;
     padding: 20px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.envelope-wreath {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(100vw, 430px); /* Größer als der Umschlag, um ihn als Kranz zu umrahmen */
+    height: auto;
+    z-index: 1; /* Hinter dem Umschlag */
+    pointer-events: none;
+    mix-blend-mode: multiply; /* Blendet weißen Hintergrund aus */
+    filter: grayscale(100%) contrast(1.1) brightness(1.1); /* Passt zum eleganten S/W-Stil */
+    opacity: 0.9;
 }
 
 .photo-envelope {
