@@ -311,7 +311,7 @@ body {
 
     /* ABSTAND ZWISCHEN DEN ELEMENTEN: 
        Hier kannst du einstellen, wie weit die Karten voneinander entfernt sind */
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 
     overflow: hidden;
 
@@ -700,20 +700,33 @@ body {
     padding-right: 4px;
 }
 
-/* Blumen-Trenner zwischen den Sektionen */
+/* Blumen-Trenner zwischen den Sektionen (Girlanden-Schlängeleffekt) */
 .section-divider {
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 40px 0; /* Großzügige Abstände nach oben/unten */
-    opacity: 0.8;
+    opacity: 0.85;
+    margin: -35px 0; /* Negativer Margin zieht die Sektionen näher zusammen und überlappt sie leicht */
+    z-index: 5;
+    position: relative;
+    pointer-events: none;
+}
+
+.section-divider.divider-left {
+    justify-content: flex-start;
+    padding-left: 5%;
+}
+
+.section-divider.divider-right {
+    justify-content: flex-end;
+    padding-right: 5%;
 }
 
 .section-divider img {
-    max-width: 120px; /* Passt die Größe der Trenner-Blumen an */
+    max-width: 160px; /* Schön groß für den Girlanden-Effekt */
     height: auto;
     object-fit: contain;
+    mix-blend-mode: multiply; /* Lässt weißen Hintergrund verschwinden */
+    filter: grayscale(100%) contrast(1.2) brightness(1.15); /* Match den Schwarz-Weiß-Look */
 }
 
 .rsvp-title {
