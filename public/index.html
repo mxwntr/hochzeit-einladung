@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hochzeitseinladung</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Audio element for background music -->
+    <!-- Using a placeholder classical music URL. You can replace this with your own local file -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3" type="audio/mpeg">
+        Ihr Browser unterstützt kein Audio.
+    </audio>
+
+    <div class="container">
+        <div class="envelope-wrapper" id="envelope-wrapper">
+            <div class="envelope">
+                <div class="flap top" id="flap">
+                    <div class="wax-seal" id="wax-seal">
+                        <span>W & M</span>
+                    </div>
+                </div>
+                <div class="flap right"></div>
+                <div class="flap left"></div>
+                <div class="flap bottom"></div>
+                
+                <div class="letter" id="letter">
+                    <div class="letter-content">
+                        <div class="names-header">Wir heiraten!</div>
+                        <h1 class="guest-name" id="guest-name">Lieber Gast,</h1>
+                        <p class="invitation-text">
+                            wir freuen uns sehr, diesen besonderen Tag mit dir zu verbringen.
+                            <br><br>
+                            <strong>Wann:</strong> 20. August 2027<br>
+                            <strong>Wo:</strong> Schloss Schönbrunn, Wien
+                        </p>
+                        
+                        <div class="rsvp-section" id="rsvp-section">
+                            <p>Bitte gib uns bis zum 01. Juni Bescheid:</p>
+                            <div class="buttons">
+                                <button class="btn accept" onclick="submitRSVP('accepted')">Zusagen</button>
+                                <button class="btn decline" onclick="submitRSVP('declined')">Absagen</button>
+                            </div>
+                        </div>
+                        <div id="rsvp-response" class="hidden">
+                            <p class="response-msg" id="response-msg"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
