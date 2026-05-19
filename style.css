@@ -778,8 +778,9 @@ body.no-scroll {
     border-radius: 20px 20px 0 0;
     border: 1px solid #e0e0e0;
     text-align: center;
-    padding: 40px 25px 35px;
+    padding: 30px 20px 20px;
     position: relative;
+    transition: all 0.4s ease-in-out;
 }
 
 /* Das kleine schwarze Siegel oben auf der RSVP Karte */
@@ -854,12 +855,14 @@ body.no-scroll {
 /* Layout der Zusagen/Absagen Buttons */
 .rsvp-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     margin-top: 10px;
+    width: 100%;
 }
 
 .rsvp-buttons button {
+    flex: 1;
     background: transparent;
     border: 1px solid var(--black);
     padding: 12px;
@@ -877,6 +880,18 @@ body.no-scroll {
     color: #fff;
 }
 
+/* Weiche Einblend-Animation für die verschiedenen Auswahl-Schritte */
+@keyframes rsvpFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Essensauswahl Layout */
 .meal-selection {
     display: flex;
@@ -885,6 +900,7 @@ body.no-scroll {
     gap: 10px;
     margin-top: 15px;
     width: 100%;
+    animation: rsvpFadeIn 0.4s ease-out forwards;
 }
 
 .meal-title {
@@ -897,28 +913,51 @@ body.no-scroll {
     text-transform: uppercase;
 }
 
+/* Individuelle Speisekarte als klickbare Buttons */
+.meal-btn-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    text-align: center !important;
+    padding: 12px 10px !important;
+    height: auto !important;
+    width: 100% !important;
+    text-transform: none !important;
+    border: 1px solid var(--black) !important;
+    background: transparent !important;
+    color: var(--black) !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+    border-radius: 4px !important;
+}
+
+.meal-btn-card:hover, .meal-btn-card.selected {
+    background: var(--black) !important;
+    color: #fff !important;
+}
+
+.meal-btn-title {
+    font-weight: bold;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.meal-btn-desc {
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    line-height: 1.3;
+    font-family: var(--font-sans);
+}
+
 .meal-buttons {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
-}
-
-.meal-buttons button {
-    background: transparent;
-    border: 1px solid var(--black);
-    padding: 10px;
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-}
-
-.meal-buttons button:hover {
-    background: var(--black);
-    color: #fff;
 }
 
 .attendance-toggle {
@@ -969,23 +1008,9 @@ body.no-scroll {
 
 .meal-option-row {
     display: flex;
-    gap: 6px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
     width: 100%;
-}
-
-.meal-option-row button {
-    flex: 1;
-    padding: 8px 2px !important;
-    font-size: min(2.5vw, 0.62rem) !important;
-    letter-spacing: 0.5px !important;
-    border: 1px solid var(--black) !important;
-    background: transparent !important;
-    color: var(--black) !important;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-    border-radius: 4px;
 }
 
 .meal-option-row button.selected {

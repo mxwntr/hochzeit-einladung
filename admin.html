@@ -216,13 +216,23 @@
         }
 
         .generator-form {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
             gap: 15px;
+            align-items: center;
             margin-bottom: 20px;
         }
 
+        @media (max-width: 768px) {
+            .generator-form {
+                grid-template-columns: 1fr;
+                align-items: stretch;
+            }
+        }
+
         .generator-form input[type="text"] {
-            flex-grow: 1;
+            width: 100%;
+            box-sizing: border-box;
             padding: 12px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
@@ -319,19 +329,19 @@
         <!-- Einladungs-Link Generator -->
         <div class="generator-card">
             <h2>Link Generator</h2>
-            <div class="generator-form" style="flex-wrap: wrap; align-items: center; gap: 15px;">
+            <div class="generator-form">
                 <!-- Einzelgast Feld -->
-                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()" style="flex: 1; min-width: 250px;">
+                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()">
                 
                 <!-- Paargast Felder (standardmäßig versteckt) -->
-                <div id="couple-names-inputs" class="hidden" style="display: none; gap: 10px; flex: 1; min-width: 250px;">
-                    <input type="text" id="guest-name1-input" placeholder="Name Person 1 (z.B. Erika)" style="flex: 1;">
-                    <input type="text" id="guest-name2-input" placeholder="Name Person 2 (z.B. Max)" style="flex: 1;">
+                <div id="couple-names-inputs" class="hidden" style="display: none; gap: 10px; width: 100%;">
+                    <input type="text" id="guest-name1-input" placeholder="Name Person 1 (z.B. Erika)" style="flex: 1; min-width: 0;">
+                    <input type="text" id="guest-name2-input" placeholder="Name Person 2 (z.B. Max)" style="flex: 1; min-width: 0;">
                 </div>
                 
-                <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
-                    <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: auto; margin: 0; cursor: pointer;">
-                    <label for="is-couple-checkbox" style="font-size: 0.85rem; cursor: pointer; user-select: none;">2 Personen (Paar)</label>
+                <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap; user-select: none;">
+                    <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                    <label for="is-couple-checkbox" style="font-size: 0.85rem; cursor: pointer;">2 Personen (Paar)</label>
                 </div>
                 <button onclick="generateLink()">Link erstellen</button>
             </div>
@@ -361,16 +371,16 @@
             
             <div class="stats" style="border-top: 1px solid var(--border-color); background: #fafafa; padding: 15px 20px;">
                 <div class="stat-box">
-                    <div class="stat-number" id="count-beef" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Rinderfilet</div>
+                    <div class="stat-number" id="count-tagliata" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Tagliata</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="count-salmon" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Lachsfilet</div>
+                    <div class="stat-number" id="count-tagliatelle" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Tagliatelle Bologn.</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="count-veg" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Vegetarisch</div>
+                    <div class="stat-number" id="count-pizza" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Pizza Venezia</div>
                 </div>
             </div>
  
@@ -512,9 +522,9 @@
             let total = 0;
             let accepted = 0;
             let declined = 0;
-            let beef = 0;
-            let salmon = 0;
-            let veg = 0;
+            let tagliata = 0;
+            let tagliatelle = 0;
+            let pizza = 0;
 
             if (snapshot.empty) {
                 tbody.innerHTML = '<tr><td colspan="4" class="loading">Noch keine Antworten erhalten.</td></tr>';
@@ -547,11 +557,11 @@
                     badge.classList.add("status-accepted");
                     accepted += count;
                     
-                    // Essenswunsch per Regex zählen (falls kombiniert wie "Rinderfilet & Vegetarisch")
+                    // Essenswunsch per Regex zählen (falls kombiniert wie "Tagliata & Pizza Venezia")
                     if (data.meal) {
-                        beef += (data.meal.match(/Rinderfilet/g) || []).length;
-                        salmon += (data.meal.match(/Lachsfilet/g) || []).length;
-                        veg += (data.meal.match(/Vegetarisch/g) || []).length;
+                        tagliata += (data.meal.match(/Tagliata|Rinderfilet/g) || []).length;
+                        tagliatelle += (data.meal.match(/Tagliatelle Bolognese|Lachsfilet/g) || []).length;
+                        pizza += (data.meal.match(/Pizza Venezia|Vegetarisch/g) || []).length;
                     }
                 } else {
                     const count = data.guestsCount !== undefined ? data.guestsCount : 1;
@@ -584,9 +594,9 @@
             document.getElementById("count-total").textContent = total;
             document.getElementById("count-accepted").textContent = accepted;
             document.getElementById("count-declined").textContent = declined;
-            document.getElementById("count-beef").textContent = beef;
-            document.getElementById("count-salmon").textContent = salmon;
-            document.getElementById("count-veg").textContent = veg;
+            document.getElementById("count-tagliata").textContent = tagliata;
+            document.getElementById("count-tagliatelle").textContent = tagliatelle;
+            document.getElementById("count-pizza").textContent = pizza;
         }, (error) => {
             console.error("Fehler beim Laden:", error);
             document.getElementById("table-body").innerHTML = '<tr><td colspan="4" class="loading" style="color:red;">Fehler: Konnte nicht geladen werden.</td></tr>';
