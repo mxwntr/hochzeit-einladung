@@ -167,7 +167,8 @@ body {
 /* ===================== WAX SEAL (Image-based) ===================== */
 .wax-seal {
     position: absolute;
-    bottom: -35px;
+    /* Move seal to the tip of the top flap (which is 0.55 * height) */
+    top: calc(min(55vw, 240px) * 0.55 - 38px);
     left: calc(50% - 38px);
     width: 76px;
     height: 76px;
