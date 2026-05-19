@@ -623,6 +623,11 @@ body {
 
 
 /* --- 5. Sektion: Monogramm (Oval) --- */
+.monogram-section {
+    overflow: visible; /* WICHTIG: Verhindert, dass der Schatten unten abgeschnitten wird! */
+    padding: 20px;     /* Gibt dem Schatten Platz */
+}
+
 .monogram-oval {
     width: min(40vw, 160px);
     height: min(55vw, 220px);
