@@ -117,44 +117,161 @@
             padding: 40px;
             color: #666;
         }
+
+        /* --- Passwort-Schutz Styles --- */
+        .hidden {
+            display: none !important;
+        }
+
+        #password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-box {
+            background: var(--paper-white);
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            width: min(85vw, 320px);
+        }
+
+        .login-box h2 {
+            font-weight: 400;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: var(--black);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .login-box button:hover {
+            background: #333;
+        }
+
+        #error-msg {
+            color: #d9534f;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: 500;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>Gästeliste Übersicht</h1>
-
-    <div class="dashboard">
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number" id="count-total">0</div>
-                <div class="stat-label">Antworten</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="count-accepted" style="color: #155724;">0</div>
-                <div class="stat-label">Zusagen</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="count-declined" style="color: #721c24;">0</div>
-                <div class="stat-label">Absagen</div>
-            </div>
+    <!-- Passwort-Abfrage Overlay -->
+    <div id="password-screen">
+        <div class="login-box">
+            <h2>Bereich geschützt</h2>
+            <input type="password" id="password-input" placeholder="Passwort eingeben" onkeydown="if(event.key === 'Enter') checkPassword()">
+            <button onclick="checkPassword()">Anmelden</button>
+            <div id="error-msg" class="hidden">Falsches Passwort!</div>
         </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Datum</th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-                <tr>
-                    <td colspan="3" class="loading">Lade Daten aus Firebase...</td>
-                </tr>
-            </tbody>
-        </table>
     </div>
+
+    <!-- Haupt-Dashboard (wird erst nach richtigem Passwort sichtbar) -->
+    <div id="admin-content" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <h1>Gästeliste Übersicht</h1>
+
+        <div class="dashboard">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="count-total">0</div>
+                    <div class="stat-label">Antworten</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="count-accepted" style="color: #155724;">0</div>
+                    <div class="stat-label">Zusagen</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="count-declined" style="color: #721c24;">0</div>
+                    <div class="stat-label">Absagen</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr>
+                        <td colspan="3" class="loading">Lade Daten aus Firebase...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Passwort-Prüfung Script -->
+    <script>
+        const CORRECT_PASSWORD = "NadjaMax2026"; // Ändere dieses Passwort wie du möchtest!
+
+        function checkPassword() {
+            const passwordInput = document.getElementById("password-input");
+            const errorMsg = document.getElementById("error-msg");
+            const passwordScreen = document.getElementById("password-screen");
+            const adminContent = document.getElementById("admin-content");
+
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                sessionStorage.setItem("admin_auth", "true");
+                passwordScreen.classList.add("hidden");
+                adminContent.classList.remove("hidden");
+            } else {
+                errorMsg.classList.remove("hidden");
+                passwordInput.value = "";
+            }
+        }
+
+        // Session prüfen
+        document.addEventListener("DOMContentLoaded", () => {
+            if (sessionStorage.getItem("admin_auth") === "true") {
+                document.getElementById("password-screen").classList.add("hidden");
+                document.getElementById("admin-content").classList.remove("hidden");
+            }
+        });
+    </script>
 
     <!-- Firebase SDK -->
     <script type="module">

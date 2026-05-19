@@ -11,10 +11,55 @@ document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     let guestName = urlParams.get("name");
 
+    // ZUGRIFFSKONTROLLE: Wenn kein Name vorhanden ist, Seite sperren
+    if (!guestName) {
+        const noAccessScreen = document.getElementById("no-access-screen");
+        if (noAccessScreen) {
+            noAccessScreen.classList.remove("hidden");
+        }
+        if (landingScreen) {
+            landingScreen.classList.add("hidden");
+        }
+        return; // Ausführung hier stoppen!
+    }
+
     // Formatting the name
     if (guestNameDisplay && guestName) {
         guestNameDisplay.textContent = `Für ${guestName}`;
     }
+
+    // Prüfen, ob dieser Gast bereits geantwortet hat
+    function checkExistingRSVP() {
+        if (window.firebaseDB && window.firebaseQuery) {
+            const q = window.firebaseQuery(
+                window.firebaseCollection(window.firebaseDB, "rsvps"),
+                window.firebaseWhere("name", "==", guestName),
+                window.firebaseLimit(1)
+            );
+            window.firebaseGetDocs(q).then((querySnapshot) => {
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const rsvpButtons = document.getElementById("rsvp-buttons");
+                        const responseMsg = document.getElementById("response-msg");
+                        if (rsvpButtons && responseMsg) {
+                            rsvpButtons.classList.add("hidden");
+                            responseMsg.classList.remove("hidden");
+                            if (data.status === 'accepted') {
+                                responseMsg.textContent = "Du hast bereits zugesagt. Wir freuen uns auf euch!";
+                            } else {
+                                responseMsg.textContent = "Du hast bereits abgesagt. Schade!";
+                            }
+                        }
+                    });
+                }
+            }).catch(err => console.error("Fehler beim Prüfen der bestehenden Zusage:", err));
+        } else {
+            // Falls Firebase noch nicht fertig geladen ist, kurz warten und nochmal versuchen
+            setTimeout(checkExistingRSVP, 100);
+        }
+    }
+    checkExistingRSVP();
 
     let opened = false;
     let isPlaying = false;

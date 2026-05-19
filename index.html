@@ -138,10 +138,18 @@
         </div>
     </div>
 
+    <!-- NO ACCESS SCREEN (Wenn kein Name in der URL steht) -->
+    <div id="no-access-screen" class="screen hidden">
+        <div class="no-access-box">
+            <h2>Einladung benötigt</h2>
+            <p>Bitte nutze den persönlichen Link aus deiner Einladungskarte, um auf die Seite zuzugreifen.</p>
+        </div>
+    </div>
+
     <!-- Firebase SDK (Modular) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Deine Firebase Konfiguration
         const firebaseConfig = {
@@ -163,6 +171,10 @@
         window.firebaseCollection = collection;
         window.firebaseAddDoc = addDoc;
         window.firebaseServerTimestamp = serverTimestamp;
+        window.firebaseQuery = query;
+        window.firebaseWhere = where;
+        window.firebaseGetDocs = getDocs;
+        window.firebaseLimit = limit;
     </script>
     <script src="script.js"></script>
 </body>
