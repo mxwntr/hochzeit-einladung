@@ -12,8 +12,8 @@
         href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
         rel="stylesheet">
 
-    <!-- Cache-Buster hinzugefügt (?v=17) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=17">
+    <!-- Cache-Buster hinzugefügt (?v=19) damit Handys das neue CSS laden! -->
+    <link rel="stylesheet" href="style.css?v=19">
 </head>
 
 <body class="no-scroll">
@@ -60,7 +60,7 @@
                     <div class="photo-envelope-back"></div>
                     <div class="photo-envelope-image">
                         <!-- Dein Hauptbild liegt in images/Pix 095.webp -->
-                        <img src="images/Pix 095.webp" alt="Max & Nadja"
+                        <img src="images/Pix 095.webp" alt="Max & Nadja" loading="lazy"
                             onerror="this.src='https://images.unsplash.com/photo-1529634597503-139d3726fed5?auto=format&fit=crop&w=600&q=80'; this.style.filter='grayscale(100%)'">
                     </div>
                     <div class="photo-envelope-flap"></div>
@@ -77,12 +77,12 @@
                     </div>
                 </div>
                 <!-- Deko-Blume -->
-                <img src="images/07.webp" class="deco-flower deco-flower-1" alt="">
+                <img src="images/07.webp" class="deco-flower deco-flower-1" loading="lazy" alt="">
             </section>
 
             <!-- Sektion 3: Namens-Karte (Bogen) -->
             <section class="section names-section">
-                <img src="images/08.webp" class="deco-flower deco-flower-2" alt="">
+                <img src="images/08.webp" class="deco-flower deco-flower-2" loading="lazy" alt="">
                 <div class="arch-card">
                     <div class="arch-content">
                         <p class="arch-subtitle">WIR LADEN EUCH HERZLICH EIN<br>ZUR HOCHZEIT VON</p>
@@ -94,7 +94,7 @@
 
             <!-- Blumen-Trenner 3 -->
             <div class="section-divider divider-right divider-gap-large">
-                <img src="images/03.webp" alt="" onerror="this.style.display='none'">
+                <img src="images/03.webp" loading="lazy" alt="" onerror="this.style.display='none'">
             </div>
 
             <!-- Sektion 4: Datum & Location -->
@@ -114,12 +114,12 @@
                         </div>
                     </div>
                 </div>
-                <img src="images/04.webp" class="deco-flower deco-flower-3" alt="">
+                <img src="images/04.webp" class="deco-flower deco-flower-3" loading="lazy" alt="">
             </section>
 
             <!-- Blumen-Trenner 4 -->
             <div class="section-divider divider-left divider-gap-large">
-                <img src="images/18.webp" alt="" onerror="this.style.display='none'">
+                <img src="images/18.webp" loading="lazy" alt="" onerror="this.style.display='none'">
             </div>
 
             <!-- Sektion 6: RSVP -->
@@ -185,7 +185,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=18"></script>
+    <script src="script.js?v=19"></script>
 </body>
 
 </html>
