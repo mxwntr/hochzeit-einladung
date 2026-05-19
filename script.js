@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             responseMsg.classList.remove("hidden");
                             if (data.status === 'accepted') {
                                 responseMsg.textContent = "Du hast bereits zugesagt. Wir freuen uns auf euch!";
-                                const calendarBtn = document.getElementById("calendar-btn");
-                                if (calendarBtn) calendarBtn.classList.remove("hidden");
+                                const calendarOptions = document.getElementById("calendar-options");
+                                if (calendarOptions) calendarOptions.classList.remove("hidden");
                             } else {
                                 responseMsg.textContent = "Du hast bereits abgesagt. Schade!";
                             }
