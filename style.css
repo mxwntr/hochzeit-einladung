@@ -1,58 +1,76 @@
-:root {
-    --bg-color: #f7f7f7;
-    --paper-white: #ffffff;
-    --black: #111111;
-    --border-color: #222222;
-    --shadow: 0 15px 35px rgba(0,0,0,0.12);
+/* =========================================================================
+   HOCHZEITSEINLADUNG - DESIGN DATEI (CSS)
+   Hier kannst du Farben, Schriften und Abstände der Einladung anpassen.
+========================================================================= */
 
-    --font-serif: 'Italiana', serif;
-    --font-script: 'Pinyon Script', cursive;
-    --font-sans: 'Montserrat', sans-serif;
+/* --- 1. FARBEN & SCHRIFTEN (VARIABLEN) ---
+   Hier definierst du die Grundfarben und Schriften für das gesamte Theme.
+   Wenn du hier eine Farbe änderst, ändert sie sich überall auf der Seite. */
+:root {
+    --bg-color: #f7f7f7;       /* Hintergrundfarbe der gesamten Seite (hellgrau) */
+    --paper-white: #ffffff;    /* Farbe der Karten/Blätter (weiß) */
+    --black: #111111;          /* Haupt-Schriftfarbe (fast schwarz) */
+    --border-color: #222222;   /* Farbe der feinen Linien und Ränder */
+    --shadow: 0 15px 35px rgba(0,0,0,0.12); /* Schattenwurf der Karten */
+
+    /* Schriften (werden aus Google Fonts in der index.html geladen) */
+    --font-serif: 'Italiana', serif;        /* Elegante Überschriften-Schrift */
+    --font-script: 'Pinyon Script', cursive; /* Geschwungene Schreibschrift (z.B. "Max & Nadja") */
+    --font-sans: 'Montserrat', sans-serif;  /* Gut lesbare Standardschrift (z.B. Datum) */
 }
 
+/* --- 2. GRUND-EINSTELLUNGEN --- 
+   Setzt Abstände zurück und sorgt dafür, dass die Seite nicht seitlich scrollt. */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html {
-    overflow-x: hidden;
-}
-
-body {
+html, body {
     background-color: var(--bg-color);
     color: var(--black);
     font-family: var(--font-sans);
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Verhindert seitliches Scrollen (sehr wichtig für Handys!) */
 }
 
-/* ===================== SCREEN MANAGEMENT ===================== */
+/* =========================================================================
+   SCREENS (Ansichten)
+   Die Seite besteht aus 2 Screens: 
+   1. Umschlag (Landing Screen) 
+   2. Einladungs-Inhalt (Content Screen)
+========================================================================= */
+
+/* Grundlayout für beide Screens */
 .screen {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     min-height: 100vh;
+    /* Der Übergang (Fade) vom Umschlag zur Einladung dauert 1.2 Sekunden */
     transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
 }
 
+/* Der Startbildschirm mit dem Umschlag */
 #landing-screen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 100; /* Liegt ganz oben drüber */
     background: var(--bg-color);
 }
 
+/* Diese Klasse wird per JavaScript hinzugefügt, wenn man auf den Umschlag klickt */
 #landing-screen.fade-out {
     opacity: 0;
     pointer-events: none;
-    transform: scale(1.05);
+    transform: scale(1.05); /* Leichter Zoom-Effekt beim Ausblenden */
 }
 
+/* Der Hauptbereich mit den eigentlichen Einladungs-Karten */
 #content-screen {
     z-index: 10;
     background: var(--bg-color);
@@ -60,6 +78,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Hilfsklassen zum Ein- und Ausblenden via JavaScript */
 .hidden {
     opacity: 0;
     pointer-events: none;
@@ -72,7 +91,12 @@ body {
     visibility: visible !important;
 }
 
-/* ===================== LANDING: ENVELOPE ===================== */
+
+/* =========================================================================
+   UMSCHLAG (LANDING SCREEN)
+========================================================================= */
+
+/* Der pulsierende Text "Zum Öffnen klicken..." */
 .click-hint {
     margin-top: 40px;
     text-align: center;
@@ -90,15 +114,17 @@ body {
     color: #555;
 }
 
+/* Der Container für den gesamten 3D-Umschlag */
 .envelope-container {
-    perspective: 1500px;
+    perspective: 1500px; /* Erzeugt den 3D-Effekt beim Aufklappen */
     cursor: pointer;
     position: relative;
-    width: min(85vw, 380px);
+    width: min(85vw, 380px); /* Passt sich ans Handy an, wird max 380px breit */
     height: min(55vw, 240px);
     margin: 0 auto;
 }
 
+/* Der Umschlag selbst (Hintergrund und Schatten) */
 .envelope-3d {
     position: relative;
     width: 100%;
@@ -108,19 +134,18 @@ body {
     border-radius: 3px;
 }
 
+/* Die Karte, die innen ein kleines bisschen herausschaut */
 .envelope-inner-card {
     position: absolute;
-    top: 8%;
-    left: 8%;
-    right: 8%;
-    bottom: 8%;
+    top: 8%; left: 8%; right: 8%; bottom: 8%;
     background: #fff;
     border: 1px solid #e0e0e0;
     border-radius: 2px;
     z-index: 1;
 }
 
-/* Flaps */
+/* --- Die 4 Klappen des Umschlags --- */
+/* Die Klappen werden mit CSS-Rändern (borders) als Dreiecke gezeichnet */
 .flap {
     position: absolute;
     width: 100%;
@@ -154,32 +179,41 @@ body {
     border-left: calc(min(85vw, 380px) / 2) solid transparent;
     border-right: calc(min(85vw, 380px) / 2) solid transparent;
     top: 0;
-    transform-origin: top;
+    transform-origin: top; /* Klappt nach oben auf (Scharnier oben) */
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 6;
 }
 
+/* Zustand, wenn der Umschlag geklickt (geöffnet) wurde */
 .envelope-container.open .flap.top {
-    transform: rotateX(180deg);
+    transform: rotateX(180deg); /* Dreht die obere Klappe um 180 Grad nach hinten */
     z-index: 0;
 }
 
-/* ===================== WAX SEAL (Image-based) ===================== */
+
+/* =========================================================================
+   WACHSSIEGEL AUF DEM UMSCHLAG
+========================================================================= */
+
 .wax-seal {
     position: absolute;
-    /* Move seal to the tip of the top flap (which is 0.55 * height) */
-    top: calc(min(55vw, 240px) * 0.55 - 38px);
+    /* Positioniert das Siegel exakt an der Spitze der Umschlagklappe */
+    top: calc(min(55vw, 240px) * 0.55 - 38px); 
     left: calc(50% - 38px);
+    
+    /* Größe des Siegels */
     width: 76px;
     height: 76px;
+    
     display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 0.4s 0.6s, transform 0.3s;
     z-index: 10;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); /* Leichter Schatten */
 }
 
+/* Dein eigenes Siegel-Bild aus dem images/ Ordner */
 .seal-img {
     position: absolute;
     width: 100%;
@@ -188,14 +222,15 @@ body {
     border-radius: 50%;
 }
 
+/* Die Initialen, die über dem Siegel-Bild liegen */
 .seal-initial {
     position: relative;
     z-index: 2;
-    color: #111;
+    color: #111; /* Schwarze Schrift auf rotem Wachs */
     font-family: var(--font-serif);
     font-size: 1.1rem;
     letter-spacing: 1px;
-    text-shadow: 0 0 2px rgba(255,255,255,0.3);
+    text-shadow: 0 0 2px rgba(255,255,255,0.3); /* Leichter weißer Schein zur Lesbarkeit */
 }
 
 .seal-amp {
@@ -204,19 +239,26 @@ body {
     margin: 0 1px;
 }
 
+/* Siegel verschwindet beim Öffnen */
 .envelope-container.open .wax-seal {
     opacity: 0;
 }
 
+/* Leichte Vergrößerung, wenn man mit der Maus drüberfährt (nur am PC) */
 .envelope-container:hover:not(.open) .wax-seal {
     transform: scale(1.08);
 }
 
-/* ===================== INVITATION SCROLL ===================== */
+
+/* =========================================================================
+   HAUPT-INHALT (EINLADUNGS-KARTEN)
+========================================================================= */
+
+/* Der unsichtbare Rahmen, in dem alle Karten untereinander liegen */
 .invitation-scroll {
     width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 500px; /* Maximale Breite auf großen Bildschirmen */
+    margin: 0 auto;   /* Zentriert den gesamten Inhalt */
     padding: 20px 20px 0;
     overflow-x: hidden;
     display: flex;
@@ -224,28 +266,36 @@ body {
     align-items: center;
 }
 
+/* Eine einzelne Sektion (z.B. Foto, Datum, RSVP) */
 .section {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-bottom: 30px; /* Reduced margin to bring elements closer */
-    overflow: hidden; /* Prevents flowers from causing horizontal scroll */
-    /* Fade-in on scroll */
+    
+    /* ABSTAND ZWISCHEN DEN ELEMENTEN: 
+       Hier kannst du einstellen, wie weit die Karten voneinander entfernt sind */
+    margin-bottom: 30px; 
+    
+    overflow: hidden;
+    
+    /* Animation: Element ist anfangs unsichtbar und nach unten verschoben */
     opacity: 0;
     transform: translateY(25px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
+/* Diese Klasse wird via JavaScript hinzugefügt, sobald man zum Element scrollt */
 .section.in-view {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0); /* Fährt sanft hoch */
 }
 
-/* ===================== SECTION 1: COUPLE PHOTO ENVELOPE ===================== */
+
+/* --- 1. Sektion: Umschlag mit Eurem Foto --- */
 .envelope-photo-section {
-    overflow: visible; /* Allow flower to peek out slightly */
+    overflow: visible; 
     padding: 20px 0;
 }
 
@@ -257,6 +307,7 @@ body {
     z-index: 2;
 }
 
+/* Der untere weiße Teil des Foto-Umschlags */
 .photo-envelope-back {
     position: absolute;
     bottom: 0;
@@ -267,13 +318,14 @@ body {
     border-radius: 2px;
 }
 
+/* Rahmen für das Foto */
 .photo-envelope-image {
     position: absolute;
     top: 0;
     left: 10%;
     width: 80%;
     height: 75%;
-    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%); /* Schneidet das Foto als Dreieck zu */
     z-index: 1;
     overflow: hidden;
 }
@@ -282,7 +334,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%) contrast(1.05);
+    filter: grayscale(100%) contrast(1.05); /* Macht das Foto schwarz-weiß */
 }
 
 .photo-envelope-flap {
@@ -295,38 +347,24 @@ body {
     z-index: 2;
 }
 
-/* Deco Flowers — positioned within section bounds */
+
+/* --- Blumen-Dekoration (Allgemein) --- */
 .deco-flower {
     position: absolute;
-    filter: grayscale(100%) contrast(1.2) brightness(1.1);
-    mix-blend-mode: multiply;
+    filter: grayscale(100%) contrast(1.2) brightness(1.1); /* Schwarz-weiß Filter */
+    mix-blend-mode: multiply; /* Lässt den weißen Hintergrund der Blumen verschwinden */
     pointer-events: none;
     z-index: 1;
     max-width: 45%;
 }
 
-.deco-flower-1 {
-    top: -10px;
-    right: -5px;
-    width: 180px;
-    transform: rotate(25deg);
-}
+/* Positionen der einzelnen Blumen */
+.deco-flower-1 { top: -10px; right: -5px; width: 180px; transform: rotate(25deg); }
+.deco-flower-2 { bottom: -30px; left: -5px; width: 160px; transform: rotate(-15deg); }
+.deco-flower-3 { top: -10px; right: -5px; width: 150px; transform: rotate(-100deg); }
 
-.deco-flower-2 {
-    bottom: -30px;
-    left: -5px;
-    width: 160px;
-    transform: rotate(-15deg);
-}
 
-.deco-flower-3 {
-    top: -10px;
-    right: -5px;
-    width: 150px;
-    transform: rotate(-100deg);
-}
-
-/* ===================== SECTION 2: VINYL RECORD ===================== */
+/* --- 2. Sektion: Schallplatte (Musik-Player) --- */
 .vinyl-section {
     margin-bottom: 30px;
 }
@@ -334,7 +372,7 @@ body {
 .vinyl-record {
     width: min(50vw, 200px);
     height: min(50vw, 200px);
-    border-radius: 50%;
+    border-radius: 50%; /* Macht es rund */
     background: #111;
     cursor: pointer;
     box-shadow: 8px 12px 25px rgba(0,0,0,0.35);
@@ -346,29 +384,29 @@ body {
 }
 
 .vinyl-record:hover {
-    transform: scale(1.05);
+    transform: scale(1.05); /* Leichter Zoom beim Hover */
 }
 
+/* Die Rillen der Schallplatte */
 .vinyl-grooves {
     position: absolute;
-    width: 90%;
-    height: 90%;
+    width: 90%; height: 90%;
     border-radius: 50%;
     background: repeating-radial-gradient(
       #111, #111 4px, #1a1a1a 5px, #111 6px
     );
 }
 
+/* Das Etikett in der Mitte */
 .vinyl-label {
     position: absolute;
-    width: 38%;
-    height: 38%;
+    width: 38%; height: 38%;
     background: linear-gradient(135deg, #e8e8e8, #d0d0d0);
     border-radius: 50%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     border: 2px solid #999;
     z-index: 2;
 }
@@ -383,8 +421,7 @@ body {
 }
 
 .play-btn {
-    width: 22px;
-    height: 22px;
+    width: 22px; height: 22px;
     background: #111;
     color: #fff;
     border-radius: 50%;
@@ -395,15 +432,16 @@ body {
     padding-left: 2px;
 }
 
+/* Animation: Drehen der Schallplatte, wenn Musik läuft */
 @keyframes spin {
     100% { transform: rotate(360deg); }
 }
-
 .playing .vinyl-grooves {
     animation: spin 3s linear infinite;
 }
 
-/* ===================== SECTION 3: ARCH (NAMES) CARD ===================== */
+
+/* --- 3. Sektion: Namen (Die Karte mit dem runden Bogen oben) --- */
 .names-section {
     overflow: visible;
     padding: 30px 0;
@@ -411,6 +449,7 @@ body {
 
 .arch-card {
     width: min(75vw, 300px);
+    /* Rundet die oberen Ecken ab, um den Bogen zu erzeugen */
     border-radius: min(38vw, 150px) min(38vw, 150px) 0 0;
     background: var(--paper-white);
     border: 1px solid #e0e0e0;
@@ -446,6 +485,7 @@ body {
     margin: 5px 0;
 }
 
+/* Der personalisierte Gastname (aus dem ?name= Parameter) */
 .guest-name {
     margin-top: 25px;
     font-family: var(--font-serif);
@@ -454,7 +494,8 @@ body {
     font-style: italic;
 }
 
-/* ===================== SECTION 4: DATE CARD ===================== */
+
+/* --- 4. Sektion: Datum & Location --- */
 .date-section {
     overflow: visible;
     padding: 15px 0;
@@ -469,6 +510,7 @@ body {
     z-index: 2;
 }
 
+/* Der doppelte Rahmen innerhalb der Karte */
 .inner-border {
     width: 100%;
     border: 2px solid var(--border-color);
@@ -480,24 +522,11 @@ body {
     text-align: center;
 }
 
-.date-number {
-    font-family: var(--font-serif);
-    font-size: min(10vw, 2.5rem);
-    line-height: 1;
-}
+.date-number { font-family: var(--font-serif); font-size: min(10vw, 2.5rem); line-height: 1; }
+.date-month { font-family: var(--font-script); font-size: min(14vw, 3.5rem); margin: -8px 0 -5px; }
+.date-year { font-family: var(--font-serif); font-size: min(8vw, 2rem); margin-bottom: 15px; }
 
-.date-month {
-    font-family: var(--font-script);
-    font-size: min(14vw, 3.5rem);
-    margin: -8px 0 -5px;
-}
-
-.date-year {
-    font-family: var(--font-serif);
-    font-size: min(8vw, 2rem);
-    margin-bottom: 15px;
-}
-
+/* Die feine Trennlinie über der Uhrzeit */
 .divider {
     width: 40px;
     height: 1px;
@@ -511,11 +540,12 @@ body {
     line-height: 1.9;
 }
 
-/* ===================== SECTION 5: MONOGRAM ===================== */
+
+/* --- 5. Sektion: Monogramm (Oval) --- */
 .monogram-oval {
     width: min(40vw, 160px);
     height: min(55vw, 220px);
-    border-radius: 50%;
+    border-radius: 50%; /* Ovalform durch unterschiedliche Breite/Höhe */
     background: var(--paper-white);
     box-shadow: var(--shadow);
     padding: 10px;
@@ -526,8 +556,7 @@ body {
 }
 
 .oval-inner {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     border-radius: 50%;
     border: 2px solid var(--border-color);
     display: flex;
@@ -541,7 +570,8 @@ body {
     letter-spacing: 5px;
 }
 
-/* ===================== SECTION 6: RSVP ===================== */
+
+/* --- 6. Sektion: Zu- und Absage (RSVP) --- */
 .rsvp-card {
     width: min(75vw, 300px);
     background: var(--paper-white);
@@ -553,9 +583,9 @@ body {
     position: relative;
 }
 
+/* Das kleine schwarze Siegel oben auf der RSVP Karte */
 .rsvp-seal {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     background: #222;
     border-radius: 50%;
     color: #fff;
@@ -584,6 +614,7 @@ body {
     margin: -5px 0 15px;
 }
 
+/* Layout der Zusagen/Absagen Buttons */
 .rsvp-buttons {
     display: flex;
     flex-direction: column;
@@ -604,21 +635,19 @@ body {
 }
 
 .rsvp-buttons button:hover {
-    background: var(--black);
+    background: var(--black); /* Wird schwarz beim Drüberfahren */
     color: #fff;
 }
 
+/* Die Antwort, die nach dem Klicken auf einen Button erscheint */
 .response-msg {
     margin-top: 20px;
     font-family: var(--font-script);
     font-size: 1.5rem;
 }
 
-.hidden {
-    display: none;
-}
 
-/* ===================== FOOTER ===================== */
+/* --- Footer (Abschluss der Seite) --- */
 .footer {
     text-align: center;
     background: var(--black);
