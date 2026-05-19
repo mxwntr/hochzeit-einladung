@@ -919,6 +919,71 @@ body.no-scroll {
     color: #fff;
 }
 
+/* Paargast-Auswahl & Essenszeilen Layout */
+.meal-row {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.meal-row-title {
+    font-family: var(--font-sans);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.meal-option-row {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+}
+
+.meal-option-row button {
+    flex: 1;
+    padding: 8px 2px !important;
+    font-size: min(2.5vw, 0.62rem) !important;
+    letter-spacing: 0.5px !important;
+    border: 1px solid var(--black) !important;
+    background: transparent !important;
+    color: var(--black) !important;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    border-radius: 4px;
+}
+
+.meal-option-row button.selected {
+    background: var(--black) !important;
+    color: #fff !important;
+}
+
+.couple-submit-btn {
+    display: inline-block;
+    background: var(--black);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.couple-submit-btn:hover {
+    background: #333;
+    transform: translateY(-1px);
+}
+
 /* Die Antwort, die nach dem Klicken auf einen Button erscheint */
 .response-msg {
     margin-top: 20px;

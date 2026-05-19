@@ -319,8 +319,12 @@
         <!-- Einladungs-Link Generator -->
         <div class="generator-card">
             <h2>Link Generator</h2>
-            <div class="generator-form">
-                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()">
+            <div class="generator-form" style="flex-wrap: wrap; align-items: center;">
+                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()" style="flex: 1; min-width: 250px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="is-couple-checkbox" style="width: auto; margin: 0; cursor: pointer;">
+                    <label for="is-couple-checkbox" style="font-size: 0.85rem; cursor: pointer; user-select: none;">2 Personen (Paar)</label>
+                </div>
                 <button onclick="generateLink()">Link erstellen</button>
             </div>
             <div id="result-wrapper" class="hidden">
@@ -403,6 +407,7 @@
         // Link Generator Funktionen
         function generateLink() {
             const guestNameInput = document.getElementById("guest-name-input");
+            const isCoupleCheckbox = document.getElementById("is-couple-checkbox");
             const resultWrapper = document.getElementById("result-wrapper");
             const linkText = document.getElementById("generated-link-text");
             const copyBtn = document.getElementById("copy-btn");
@@ -414,7 +419,11 @@
             // admin.html abschneiden, um auf index.html zu linken
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/';
             const encodedName = encodeURIComponent(guestNameInput.value.trim());
-            const fullLink = `${baseUrl}?name=${encodedName}`;
+            let fullLink = `${baseUrl}?name=${encodedName}`;
+            
+            if (isCoupleCheckbox.checked) {
+                fullLink += `&guests=2`;
+            }
 
             linkText.textContent = fullLink;
             copyBtn.textContent = "Kopieren";
@@ -496,18 +505,22 @@
                 const badge = document.createElement("span");
                 badge.classList.add("status-badge");
                 if (data.status === "accepted") {
-                    badge.textContent = "Zusage";
+                    const count = data.guestsCount !== undefined ? data.guestsCount : 1;
+                    badge.textContent = count > 1 ? `Zusage (${count} Pers.)` : "Zusage";
                     badge.classList.add("status-accepted");
-                    accepted++;
+                    accepted += count;
                     
-                    // Essenswunsch zählen
-                    if (data.meal === "Rinderfilet") beef++;
-                    else if (data.meal === "Lachsfilet") salmon++;
-                    else if (data.meal === "Vegetarisch") veg++;
+                    // Essenswunsch per Regex zählen (falls kombiniert wie "Rinderfilet & Vegetarisch")
+                    if (data.meal) {
+                        beef += (data.meal.match(/Rinderfilet/g) || []).length;
+                        salmon += (data.meal.match(/Lachsfilet/g) || []).length;
+                        veg += (data.meal.match(/Vegetarisch/g) || []).length;
+                    }
                 } else {
-                    badge.textContent = "Absage";
+                    const count = data.guestsCount !== undefined ? data.guestsCount : 1;
+                    badge.textContent = count > 1 ? `Absage (${count} Pers.)` : "Absage";
                     badge.classList.add("status-declined");
-                    declined++;
+                    declined += count;
                 }
                 tdStatus.appendChild(badge);
                 tr.appendChild(tdStatus);

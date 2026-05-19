@@ -163,18 +163,98 @@ function observeSections() {
     });
 }
 
-function showMealChoice() {
-    document.getElementById("rsvp-buttons").classList.add("hidden");
-    document.getElementById("meal-selection").classList.remove("hidden");
+function handleZusageClick() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isCouple = urlParams.get("guests") === "2";
+    
+    if (isCouple) {
+        document.getElementById("rsvp-buttons").classList.add("hidden");
+        document.getElementById("couple-selection").classList.remove("hidden");
+    } else {
+        document.getElementById("rsvp-buttons").classList.add("hidden");
+        document.getElementById("meal-selection").classList.remove("hidden");
+    }
 }
 
-function submitRSVP(status, meal = "") {
+let coupleAttendance = 0;
+let guest1Meal = "";
+let guest2Meal = "";
+
+function selectCoupleAttendance(count) {
+    coupleAttendance = count;
+    guest1Meal = "";
+    guest2Meal = "";
+    
+    // Zuvor getroffene Essensauswahlen der Paarknöpfe zurücksetzen
+    document.querySelectorAll("#couple-meal-selection .meal-option-row button").forEach(btn => {
+        btn.classList.remove("selected");
+    });
+    
+    // Verstecke die Paarauswahl-Frage
+    document.getElementById("couple-selection").classList.add("hidden");
+    
+    // Blende Essensauswahl ein
+    document.getElementById("couple-meal-selection").classList.remove("hidden");
+    
+    const guest2Row = document.getElementById("guest2-meal-row");
+    const guest1RowTitle = document.getElementById("guest1-row-title");
+    
+    if (count === 1) {
+        guest2Row.classList.add("hidden");
+        guest1RowTitle.textContent = "Hauptgang wählen:";
+    } else {
+        guest2Row.classList.remove("hidden");
+        guest1RowTitle.textContent = "Hauptgang Person 1:";
+    }
+}
+
+function selectMeal(guestNum, meal, btnElement) {
+    const row = btnElement.parentElement;
+    row.querySelectorAll("button").forEach(btn => {
+        btn.classList.remove("selected");
+    });
+    btnElement.classList.add("selected");
+    
+    if (guestNum === 1) {
+        guest1Meal = meal;
+    } else {
+        guest2Meal = meal;
+    }
+}
+
+function submitCoupleRSVP() {
+    if (coupleAttendance === 2) {
+        if (!guest1Meal || !guest2Meal) {
+            alert("Bitte wähle für beide Personen einen Hauptgang aus!");
+            return;
+        }
+        const combinedMeal = `${guest1Meal} & ${guest2Meal}`;
+        submitRSVP('accepted', combinedMeal, 2);
+    } else if (coupleAttendance === 1) {
+        if (!guest1Meal) {
+            alert("Bitte wähle einen Hauptgang aus!");
+            return;
+        }
+        const combinedMeal = `${guest1Meal} (1 Person)`;
+        submitRSVP('accepted', combinedMeal, 1);
+    }
+}
+
+function submitRSVP(status, meal = "", guestsCount = 1) {
     const urlParams = new URLSearchParams(window.location.search);
     let guestName = urlParams.get("name") || "Gast ohne Namen";
+    const isCouple = urlParams.get("guests") === "2";
 
-    // Buttons und Essensauswahl verstecken, damit nicht doppelt geklickt wird
+    // Bei einer Absage die passende Personenanzahl festlegen
+    if (status === 'declined') {
+        guestsCount = isCouple ? 2 : 1;
+    }
+
+    // Alle möglichen Buttons und Auswahlen verstecken
     document.getElementById("rsvp-buttons").classList.add("hidden");
     document.getElementById("meal-selection").classList.add("hidden");
+    document.getElementById("couple-selection").classList.add("hidden");
+    document.getElementById("couple-meal-selection").classList.add("hidden");
     
     const responseMsg = document.getElementById("response-msg");
     responseMsg.classList.remove("hidden");
@@ -185,7 +265,8 @@ function submitRSVP(status, meal = "") {
         window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "rsvps"), {
             name: guestName,
             status: status,
-            meal: meal, // Das gewählte Essen wird mit abgespeichert
+            meal: meal, // Das gewählte Essen (bei Paaren kombiniert)
+            guestsCount: guestsCount, // Anzahl der Personen, die zu- oder absagen
             timestamp: window.firebaseServerTimestamp()
         }).then(() => {
             // Erfolgreich gespeichert!

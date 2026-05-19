@@ -12,8 +12,8 @@
         href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
         rel="stylesheet">
 
-    <!-- Cache-Buster hinzugefügt (?v=20) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=20">
+    <!-- Cache-Buster hinzugefügt (?v=21) damit Handys das neue CSS laden! -->
+    <link rel="stylesheet" href="style.css?v=21">
 </head>
 
 <body class="no-scroll">
@@ -136,18 +136,48 @@
                     <p class="rsvp-script">wird gebeten</p>
                     
                     <div class="rsvp-buttons" id="rsvp-buttons">
-                        <button onclick="showMealChoice()">Zusagen</button>
+                        <button onclick="handleZusageClick()">Zusagen</button>
                         <button onclick="submitRSVP('declined')">Absagen</button>
                     </div>
 
-                    <!-- Essensauswahl (wird nach Klick auf Zusagen angezeigt) -->
+                    <!-- Einzelgast-Essensauswahl (wird nach Klick auf Zusagen angezeigt) -->
                     <div id="meal-selection" class="meal-selection hidden">
                         <p class="meal-title">Hauptgang wählen:</p>
                         <div class="meal-buttons">
-                            <button onclick="submitRSVP('accepted', 'Rinderfilet')">Rinderfilet</button>
-                            <button onclick="submitRSVP('accepted', 'Lachsfilet')">Lachsfilet</button>
-                            <button onclick="submitRSVP('accepted', 'Vegetarisch')">Vegetarisch</button>
+                            <button onclick="submitRSVP('accepted', 'Rinderfilet', 1)">Rinderfilet</button>
+                            <button onclick="submitRSVP('accepted', 'Lachsfilet', 1)">Lachsfilet</button>
+                            <button onclick="submitRSVP('accepted', 'Vegetarisch', 1)">Vegetarisch</button>
                         </div>
+                    </div>
+
+                    <!-- Paarauswahl (wird angezeigt bei guests=2 nach Klick auf Zusagen) -->
+                    <div id="couple-selection" class="meal-selection hidden">
+                        <p class="meal-title">Wer kommt von euch?</p>
+                        <div class="meal-buttons">
+                            <button onclick="selectCoupleAttendance(2)">Wir kommen beide</button>
+                            <button onclick="selectCoupleAttendance(1)">Nur einer kommt</button>
+                        </div>
+                    </div>
+
+                    <!-- Hauptgänge für Paare (wird nach Auswahl oben angezeigt) -->
+                    <div id="couple-meal-selection" class="meal-selection hidden">
+                        <div id="guest1-meal-row" class="meal-row">
+                            <p id="guest1-row-title" class="meal-row-title">Hauptgang Person 1:</p>
+                            <div class="meal-option-row">
+                                <button type="button" onclick="selectMeal(1, 'Rinderfilet', this)">Rinderfilet</button>
+                                <button type="button" onclick="selectMeal(1, 'Lachsfilet', this)">Lachsfilet</button>
+                                <button type="button" onclick="selectMeal(1, 'Vegetarisch', this)">Vegetarisch</button>
+                            </div>
+                        </div>
+                        <div id="guest2-meal-row" class="meal-row">
+                            <p class="meal-row-title">Hauptgang Person 2:</p>
+                            <div class="meal-option-row">
+                                <button type="button" onclick="selectMeal(2, 'Rinderfilet', this)">Rinderfilet</button>
+                                <button type="button" onclick="selectMeal(2, 'Lachsfilet', this)">Lachsfilet</button>
+                                <button type="button" onclick="selectMeal(2, 'Vegetarisch', this)">Vegetarisch</button>
+                            </div>
+                        </div>
+                        <button id="couple-submit-btn" onclick="submitCoupleRSVP()" class="couple-submit-btn" style="margin-top: 10px; width: 100%;">Zusage absenden</button>
                     </div>
 
                     <p id="response-msg" class="response-msg hidden"></p>
@@ -203,7 +233,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=20"></script>
+    <script src="script.js?v=21"></script>
 </body>
 
 </html>
