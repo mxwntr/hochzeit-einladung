@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Max und Nadja//Hochzeit//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+SUMMARY:Hochzeit von Max & Nadja
+UID:hochzeit-max-nadja-2026@nadja-und-max-heiraten.de
+SEQUENCE:0
+STATUS:CONFIRMED
+DTSTART:20260826T080000Z
+DTEND:20260826T220000Z
+DTSTAMP:20260519T120000Z
+DESCRIPTION:Wir heiraten! \n\n10:00 Uhr: Standesamt Ratingen\nAnschließend: Restaurante Milano\, Ratingen Lintorf\n\nWir freuen uns sehr auf euch!
+LOCATION:Standesamt Ratingen\, Ratingen\, Deutschland
+END:VEVENT
+END:VCALENDAR

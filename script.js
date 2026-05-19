@@ -195,31 +195,19 @@ function submitRSVP(status) {
     }
 }
 
-// Kalender-Download Funktion (.ics)
-function downloadCalendarEvent() {
-    const calendarContent = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Max und Nadja//Hochzeit//DE",
-        "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH",
-        "BEGIN:VEVENT",
-        "UID:hochzeit-max-nadja-2026",
-        "DTSTAMP:20260519T120000Z",
-        "DTSTART;TZID=Europe/Berlin:20260826T100000",
-        "DTEND;TZID=Europe/Berlin:20260826T235900",
-        "SUMMARY:Hochzeit von Max & Nadja",
-        "DESCRIPTION:Wir freuen uns riesig auf euch!\\n\\nAblauf:\\n- 10:00 Uhr: Standesamt Ratingen\\n- Anschliessend: Restaurante Milano in Ratingen Lintorf",
-        "LOCATION:Standesamt Ratingen, Ratingen, Deutschland",
-        "END:VEVENT",
-        "END:VCALENDAR"
-    ].join("\r\n");
-
-    const blob = new Blob([calendarContent], { type: "text/calendar;charset=utf-8" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Hochzeit_Max_und_Nadja.ics";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+// Kalender-Funktion: Öffnet den Kalender direkt (ohne manuellen Download-Umweg)
+function addToCalendar() {
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    if (isAndroid) {
+        // Für Android-Nutzer direkt das Event im Google Kalender erstellen (öffnet Browser oder App)
+        const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+            "&text=" + encodeURIComponent("Hochzeit von Max & Nadja") +
+            "&dates=20260826T080000Z/20260826T220000Z" +
+            "&details=" + encodeURIComponent("Wir heiraten!\n\n10:00 Uhr: Standesamt Ratingen\nAnschließend: Restaurante Milano, Ratingen Lintorf\n\nWir freuen uns sehr auf euch!") +
+            "&location=" + encodeURIComponent("Standesamt Ratingen, Ratingen, Deutschland");
+        window.open(googleCalendarUrl, "_blank");
+    } else {
+        // Für iOS (iPhone/iPad) und Desktop lädt die fertige .ics Datei herunter und öffnet direkt den nativen Kalender
+        window.location.href = "invite.ics";
+    }
 }
