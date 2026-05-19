@@ -107,15 +107,7 @@ body.no-scroll {
 
 /* Hilfsklassen zum Ein- und Ausblenden via JavaScript */
 .hidden {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-}
-
-.visible {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
+    display: none !important;
 }
 
 
