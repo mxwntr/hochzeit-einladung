@@ -126,7 +126,7 @@ body.no-scroll {
 /* Der pulsierende Text "Zum Öffnen klicken..." */
 .click-hint {
     position: absolute;
-    bottom: 25px; /* Am unteren Bildschirmrand platziert */
+    top: 30px; /* Am oberen Bildschirmrand platziert */
     left: 0;
     width: 100%;
     text-align: center;
@@ -315,7 +315,7 @@ body.no-scroll {
     /* Maximale Breite auf großen Bildschirmen */
     margin: 0 auto;
     /* Zentriert den gesamten Inhalt */
-    padding: 20px 20px 0;
+    padding: 70px 20px 0; /* Mehr Platz oben (70px statt 20px), damit das Foto nicht abgeschnitten wird */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
