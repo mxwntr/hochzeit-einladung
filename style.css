@@ -1,14 +1,13 @@
 :root {
-    --bg-color: #ffffff;
-    --text-black: #1a1a1a;
-    --off-white: #f5f5f5;
-    --envelope-white: #fefefe;
-    --shadow-color: rgba(0, 0, 0, 0.15);
+    --bg-color: #f7f7f7;
+    --paper-white: #ffffff;
+    --black: #111111;
+    --border-color: #222222;
+    --shadow: 0 15px 35px rgba(0,0,0,0.15);
     
-    --font-sans: 'Montserrat', sans-serif;
-    --font-serif: 'Playfair Display', serif;
-    --font-elegant: 'Italiana', serif;
+    --font-serif: 'Italiana', serif;
     --font-script: 'Pinyon Script', cursive;
+    --font-sans: 'Montserrat', sans-serif;
 }
 
 * {
@@ -19,490 +18,400 @@
 
 body {
     background-color: var(--bg-color);
-    color: var(--text-black);
+    color: var(--black);
     font-family: var(--font-sans);
-    overflow-x: hidden;
-}
-
-/* Screen Management */
-.screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    display: flex;
+    justify-content: center;
     min-height: 100vh;
-    transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+    overflow-x: hidden;
+    padding: 20px 0;
 }
 
-#landing-screen {
+/* The scalable collage container */
+.collage-container {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    height: 1100px; /* fixed proportion for exact placement */
+    background-color: transparent;
+}
+
+/* Base class for absolutely positioned items */
+.collage-element {
+    position: absolute;
+    box-shadow: var(--shadow);
+    background: var(--paper-white);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 100;
-    background: var(--bg-color);
 }
 
-#landing-screen.fade-out {
-    opacity: 0;
+/* Flowers */
+.flower {
+    position: absolute;
+    filter: grayscale(100%) contrast(1.2) brightness(1.1);
+    mix-blend-mode: multiply;
     pointer-events: none;
-    transform: scale(1.05);
 }
 
-#content-screen {
-    z-index: 10;
-    background: var(--bg-color);
-    position: relative;
-    padding-top: 50px;
-}
-
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
-}
-
-.visible {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    visibility: visible !important;
-}
-
-/* Typography for Landing */
-.intro-text {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.script-text {
-    font-family: var(--font-script);
-    font-size: 3.5rem;
-    line-height: 0.8;
-}
-
-.serif-text {
-    font-family: var(--font-elegant);
-    font-size: 2.2rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-}
-
-.click-hint {
-    margin-top: 50px;
-}
-
-.script-text-small {
-    font-family: var(--font-script);
-    font-size: 2.5rem;
-}
-
-/* ENVELOPE (White styling) */
-.envelope-container {
-    perspective: 1500px;
-    cursor: pointer;
-    position: relative;
-    width: 380px;
-    height: 250px;
-}
-
-.envelope {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: var(--envelope-white);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08), inset 0 0 10px rgba(0,0,0,0.02);
-    border-radius: 2px;
-}
-
-/* Flaps */
-.flap {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
-}
-
-.flap.left {
-    border-left: 190px solid #f9f9f9;
-    border-top: 125px solid transparent;
-    border-bottom: 125px solid transparent;
-    z-index: 4;
-}
-
-.flap.right {
-    border-right: 190px solid #f9f9f9;
-    border-top: 125px solid transparent;
-    border-bottom: 125px solid transparent;
-    right: 0;
-    z-index: 4;
-}
-
-.flap.bottom {
-    border-bottom: 125px solid #ffffff;
-    border-left: 190px solid transparent;
-    border-right: 190px solid transparent;
-    bottom: 0;
-    z-index: 5;
-}
-
-.flap.top {
-    border-top: 135px solid #f4f4f4;
-    border-left: 190px solid transparent;
-    border-right: 190px solid transparent;
-    top: 0;
-    transform-origin: top;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 6;
-}
-
-.envelope-container.open .flap.top {
-    transform: rotateX(180deg);
-    z-index: 0;
-}
-
-/* Black Wax Seal */
-.wax-seal {
-    position: absolute;
-    top: -35px;
-    left: calc(50% - 30px);
-    width: 60px;
-    height: 60px;
-    background: #1a1a1a;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 -3px 8px rgba(0,0,0,0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.4s 0.6s, transform 0.3s;
-}
-
-.wax-seal::after {
-    content: '';
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    border: 1px dashed rgba(255,255,255,0.4);
-    border-radius: 50%;
-}
-
-.seal-initial {
-    color: #fff;
-    font-family: var(--font-script);
-    font-size: 2rem;
-    position: relative;
-    z-index: 2;
-}
-
-.envelope-container.open .wax-seal {
-    opacity: 0;
-}
-
-/* Decorative Flower */
-.deco-flower {
-    position: absolute;
-    left: -40px;
-    bottom: -30px;
-    width: 250px;
-    z-index: 10;
-    pointer-events: none;
-    transform: rotate(-15deg);
-    opacity: 0.8;
-}
-
-/* ------------- EDITORIAL LAYOUT ------------- */
-.editorial-layout {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-}
-
-.grid-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    position: relative;
-}
-
-.offset-right {
-    padding-left: 10%;
-}
-
-.card {
-    padding: 40px 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    text-align: center;
-    position: relative;
-}
-
-.black-card {
-    background-color: var(--text-black);
-    color: #fff;
-    width: 280px;
-    z-index: 2;
-}
-
-.white-card {
-    background-color: #fff;
-    color: var(--text-black);
-    width: 240px;
-    border: 1px solid #eaeaea;
-}
-
-.shift-down {
-    transform: translateY(40px);
-    margin-left: -30px;
+.flower-top-right {
+    top: 15%;
+    right: -10%;
+    width: 300px;
+    transform: rotate(30deg);
     z-index: 1;
 }
 
-/* Typography Inside Cards */
-.subtitle {
-    font-family: var(--font-sans);
-    font-size: 0.65rem;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-    line-height: 1.6;
+.flower-mid-left {
+    top: 45%;
+    left: -20%;
+    width: 250px;
+    transform: rotate(-15deg);
+    z-index: 4;
 }
 
-.names {
-    font-family: var(--font-elegant);
-    font-size: 2.2rem;
-    line-height: 1.1;
-    letter-spacing: 1px;
+.flower-bottom-right {
+    bottom: 10%;
+    right: -15%;
+    width: 280px;
+    transform: rotate(-120deg);
+    z-index: 2;
 }
 
-.and-script {
-    font-family: var(--font-script);
+/* 1. Open Envelope with Landscape (Top Center) */
+.open-envelope {
+    top: 2%;
+    left: 20%;
+    width: 60%;
+    height: 250px;
+    background: transparent;
+    box-shadow: none;
+    z-index: 2;
+}
+
+.envelope-back {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 180px;
+    background: var(--paper-white);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.envelope-landscape {
+    position: absolute;
+    top: 0;
+    left: 10%;
+    width: 80%;
+    height: 160px;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    background: #ccc;
+    z-index: 1;
+}
+
+.envelope-landscape img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+}
+
+.envelope-flaps {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 180px;
+    background: var(--paper-white);
+    clip-path: polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
+    z-index: 2;
+    box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+    border-top: 1px solid #eee;
+}
+
+/* 2. Vinyl Record (Mid Left) */
+.vinyl-record {
+    top: 28%;
+    left: 5%;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: #111;
+    z-index: 3;
+    cursor: pointer;
+    box-shadow: 10px 15px 30px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+}
+
+.vinyl-record:hover {
+    transform: scale(1.05);
+}
+
+.vinyl-grooves {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    border: 1px solid #333;
+    background: repeating-radial-gradient(
+      #111,
+      #111 4px,
+      #222 5px,
+      #111 6px
+    );
+}
+
+.vinyl-label {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    background: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid #555;
+}
+
+.vinyl-text {
+    font-family: var(--font-serif);
+    font-size: 0.6rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.play-btn {
+    width: 25px;
+    height: 25px;
+    background: #111;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.6rem;
+    padding-left: 2px;
+}
+
+/* 3. Date Card (Mid Right) */
+.date-card {
+    top: 32%;
+    right: 5%;
+    width: 50%;
+    height: 380px;
+    padding: 15px;
+    z-index: 4;
+}
+
+.inner-border {
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.date-number {
+    font-family: var(--font-serif);
     font-size: 2.5rem;
-    font-weight: normal;
-    text-transform: lowercase;
-    display: block;
+    line-height: 1;
+}
+
+.date-month {
+    font-family: var(--font-script);
+    font-size: 3.5rem;
     margin: -10px 0;
-}
-
-.guest-name-display {
-    margin-top: 20px;
-    font-family: var(--font-script);
-    font-size: 1.8rem;
-    color: #e0e0e0;
-}
-
-.date-script {
-    font-family: var(--font-script);
-    font-size: 3rem;
-    font-weight: normal;
-    margin-bottom: -15px;
 }
 
 .date-year {
     font-family: var(--font-serif);
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 30px;
 }
 
-.details-text {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
+.date-details {
+    font-size: 0.75rem;
     letter-spacing: 1.5px;
     line-height: 1.8;
 }
 
-/* Circle Badge */
-.badge-container {
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 15%;
-    margin-top: -30px;
-    position: relative;
+/* 4. Arch Card (Mid Left Overlapping) */
+.arch-card {
+    top: 48%;
+    left: 8%;
+    width: 45%;
+    height: 350px;
+    border-radius: 150px 150px 0 0;
     z-index: 5;
+    background: var(--paper-white);
+    border: 1px solid #ddd;
 }
 
-.circle-badge {
-    background: var(--text-black);
-    color: #fff;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.arch-content {
     text-align: center;
+    padding: 60px 20px 20px 20px;
+}
+
+.arch-subtitle {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.arch-names {
+    font-family: var(--font-script);
+    font-size: 3.5rem;
+    line-height: 0.8;
+    font-weight: normal;
+}
+
+.and {
     font-family: var(--font-serif);
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    font-size: 1.5rem;
 }
 
-/* RSVP Block & Polaroids */
-.staggered {
-    align-items: flex-start;
-    padding-left: 5%;
+.guest-name {
+    margin-top: 30px;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: #555;
+    font-style: italic;
 }
 
-.rsvp-card {
-    background: var(--off-white);
-    width: 280px;
-    padding: 50px 30px;
-    margin-top: -40px;
-    z-index: 2;
+.arch-flower {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 150px;
+    filter: grayscale(100%) contrast(1.2);
+    mix-blend-mode: multiply;
 }
 
-.mini-seal {
-    width: 40px;
-    height: 40px;
-    background: #333;
+/* 5. Monogram Oval (Bottom Left) */
+.monogram-oval {
+    top: 80%;
+    left: 10%;
+    width: 180px;
+    height: 250px;
     border-radius: 50%;
-    color: #fff;
+    z-index: 6;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.oval-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: var(--font-script);
-    font-size: 1.2rem;
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.monogram-letters {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    letter-spacing: 5px;
+}
+
+/* 6. RSVP Section (Bottom Right) */
+.rsvp-section {
+    top: 82%;
+    right: 10%;
+    width: 40%;
+    height: 180px;
+    border-radius: 20px 20px 0 0;
+    background: var(--paper-white);
+    border: 1px solid #ddd;
+    z-index: 7;
+    text-align: center;
+    padding: 20px;
 }
 
 .rsvp-title {
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    letter-spacing: 3px;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .rsvp-script {
     font-family: var(--font-script);
-    font-size: 3rem;
-    display: block;
-    margin: 10px 0;
+    font-size: 2.5rem;
     text-transform: none;
     letter-spacing: 0;
+    display: block;
+    margin-top: -5px;
 }
 
 .rsvp-buttons {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 8px;
+    margin-top: 15px;
 }
 
-.btn {
-    padding: 12px;
+.rsvp-buttons button {
     background: transparent;
-    border: 1px solid var(--text-black);
+    border: 1px solid var(--black);
+    padding: 8px;
     font-family: var(--font-sans);
     font-size: 0.7rem;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: 0.3s;
 }
 
-.btn:hover {
-    background: var(--text-black);
+.rsvp-buttons button:hover {
+    background: var(--black);
     color: #fff;
 }
 
 .response-msg {
-    margin-top: 20px;
-    font-family: var(--font-script);
-    font-size: 1.5rem;
-}
-
-/* Polaroids */
-.polaroid-stack {
-    position: relative;
-    width: 220px;
-    height: 350px;
-    margin-left: 20px;
-    margin-top: 40px;
-}
-
-.polaroid {
-    background: #fff;
-    padding: 10px 10px 30px 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    position: absolute;
-    width: 180px;
-}
-
-.polaroid img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(100%);
-}
-
-.polaroid p {
-    font-family: var(--font-serif);
-    font-size: 0.6rem;
-    text-align: center;
     margin-top: 15px;
-    letter-spacing: 1px;
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
 }
 
-.p1 {
-    top: 0;
-    left: 0;
-    transform: rotate(-5deg);
-    z-index: 1;
+.hidden {
+    display: none;
 }
 
-.p2 {
-    top: 100px;
-    right: -40px;
-    transform: rotate(8deg);
-    z-index: 2;
+/* Rotating animation for vinyl */
+@keyframes spin {
+    100% { transform: rotate(360deg); }
 }
 
-/* Footer */
-.footer {
-    text-align: center;
-    background: var(--text-black);
-    color: #fff;
-    padding: 60px 20px;
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    line-height: 2;
+.playing .vinyl-grooves {
+    animation: spin 4s linear infinite;
 }
 
-.footer-names {
-    font-family: var(--font-elegant);
-    font-size: 1.5rem;
-    display: block;
-    margin-top: 10px;
-}
-
-/* Animations for content cards */
-.card-animate {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-.card-animate.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-@media (max-width: 768px) {
-    .shift-down {
-        transform: translateY(0);
-        margin-left: 0;
-        margin-top: -20px;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .collage-container {
+        transform: scale(0.9);
+        transform-origin: top center;
     }
-    .offset-right {
-        padding-left: 0;
+}
+@media (max-width: 450px) {
+    .collage-container {
+        transform: scale(0.75);
+        transform-origin: top center;
     }
-    .badge-container {
-        padding-right: 0;
-        justify-content: center;
-    }
-    .polaroid-stack {
-        margin-left: 0;
+}
+@media (max-width: 350px) {
+    .collage-container {
+        transform: scale(0.65);
+        transform-origin: top center;
     }
 }

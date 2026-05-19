@@ -5,112 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hochzeitseinladung</title>
     
-    <!-- Google Fonts for elegant editorial look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Fonts: Italiana for elegant caps, Pinyon Script for cursive, Montserrat for sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- LANDING SCREEN (Envelope) -->
-    <div id="landing-screen" class="screen active">
+    <div class="collage-container">
         
-        <div class="intro-text">
-            <span class="script-text">Introducing</span><br>
-            <span class="serif-text">the WILSONS</span>
+        <!-- Background Flowers -->
+        <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-top-right" alt="Flower">
+        <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="flower flower-mid-left" alt="Flower">
+        <img src="https://cdn.pixabay.com/photo/2016/10/14/09/27/bouquet-1739719_1280.png" class="flower flower-bottom-right" alt="Flower">
+
+        <!-- Top Open Envelope with Landscape -->
+        <div class="collage-element open-envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-landscape">
+                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80" alt="Landscape">
+            </div>
+            <div class="envelope-flaps"></div>
         </div>
 
-        <div class="envelope-container" id="envelope-wrapper">
-            <!-- Decorative Flower (Calla Lily placeholder) -->
-            <img src="https://cdn.pixabay.com/photo/2020/02/12/04/16/flower-4841641_1280.png" alt="Flower" class="deco-flower" style="mix-blend-mode: multiply; filter: grayscale(1) contrast(1.2);">
-
-            <div class="envelope">
-                <div class="flap top" id="flap">
-                    <div class="wax-seal" id="wax-seal">
-                        <span class="seal-initial">W</span>
-                    </div>
-                </div>
-                <div class="flap right"></div>
-                <div class="flap left"></div>
-                <div class="flap bottom"></div>
+        <!-- Vinyl Record -->
+        <div class="collage-element vinyl-record" id="vinyl-btn">
+            <div class="vinyl-grooves"></div>
+            <div class="vinyl-label">
+                <span class="vinyl-text">CLICK TO LISTEN</span>
+                <div class="play-btn">▶</div>
             </div>
         </div>
 
-        <div class="click-hint">
-            <span class="script-text-small">Click to open...</span>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT SCREEN (Editorial Scroll) -->
-    <div id="content-screen" class="screen hidden">
-        
-        <div class="editorial-layout">
-            
-            <!-- Row 1: Main invite cards -->
-            <div class="grid-row offset-right">
-                <div class="card black-card card-animate">
-                    <p class="subtitle">PLEASE JOIN US<br>FOR THE WEDDING OF</p>
-                    <h2 class="names">LIAM<br><span class="and-script">and</span><br>ARIANA</h2>
-                    <!-- Personalized Guest Name will be injected here -->
-                    <p class="guest-name-display" id="guest-name-display"></p>
-                </div>
-                <div class="card white-card shift-down card-animate">
-                    <h3 class="date-script">April</h3>
-                    <div class="date-year">2027</div>
-                    <p class="details-text">
-                        AT 3PM<br>
-                        TANTALUS ESTATE,<br>
-                        WAIHEKE ISLAND
-                    </p>
+        <!-- Date Card (Rectangle) -->
+        <div class="collage-element date-card">
+            <div class="inner-border">
+                <div class="date-number">27</div>
+                <div class="date-month">August</div>
+                <div class="date-year">2027</div>
+                <div class="date-details">
+                    AT 4:00PM<br>
+                    SCHLOSS SCHÖNBRUNN,<br>
+                    WIEN
                 </div>
             </div>
-
-            <!-- Row 2: Circular badge -->
-            <div class="badge-container card-animate">
-                <div class="circle-badge">
-                    <span>CLICK<br>FOR THE<br>DETAILS</span>
-                </div>
-            </div>
-
-            <!-- Row 3: RSVP and Photos -->
-            <div class="grid-row staggered card-animate">
-                <div class="card rsvp-card">
-                    <div class="mini-seal">L&A</div>
-                    <p class="rsvp-title">KINDLY<br><span class="rsvp-script">RSVP</span><br>HERE</p>
-                    
-                    <div id="rsvp-section" class="rsvp-buttons">
-                        <button class="btn accept" onclick="submitRSVP('accepted')">ACCEPT</button>
-                        <button class="btn decline" onclick="submitRSVP('declined')">DECLINE</button>
-                    </div>
-                    <div id="rsvp-response" class="hidden">
-                        <p class="response-msg" id="response-msg"></p>
-                    </div>
-                </div>
-
-                <div class="polaroid-stack">
-                    <div class="polaroid p1">
-                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0a1?auto=format&fit=crop&w=400&q=80" alt="Couple 1">
-                        <p>CLICK FOR</p>
-                    </div>
-                    <div class="polaroid p2">
-                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400&q=80" alt="Couple 2">
-                        <p>OUR LOVE STORY</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>WITH LOVE & GRATITUDE.<br><span class="footer-names">LIAM AND ARIANA</span></p>
-        </footer>
+        <!-- Arch Card -->
+        <div class="collage-element arch-card">
+            <div class="arch-content">
+                <p class="arch-subtitle">PLEASE JOIN US FOR<br>THE WEDDING OF</p>
+                <h1 class="arch-names">Max<br><span class="and">&</span><br>Julia</h1>
+                <p id="guest-name-display" class="guest-name"></p>
+            </div>
+            <!-- Small flower overlay on arch -->
+            <img src="https://cdn.pixabay.com/photo/2017/02/19/22/19/orchid-2081075_1280.png" class="arch-flower" alt="Flower">
+        </div>
+
+        <!-- Monogram Oval -->
+        <div class="collage-element monogram-oval">
+            <div class="oval-inner">
+                <span class="monogram-letters">M J</span>
+            </div>
+        </div>
+
+        <!-- RSVP Section (Replacing bottom envelope for functionality) -->
+        <div class="collage-element rsvp-section">
+            <p class="rsvp-title">Kindly<br><span class="rsvp-script">RSVP</span></p>
+            <div class="rsvp-buttons" id="rsvp-buttons">
+                <button onclick="submitRSVP('accepted')">Accept</button>
+                <button onclick="submitRSVP('declined')">Decline</button>
+            </div>
+            <p id="response-msg" class="response-msg hidden"></p>
+        </div>
 
     </div>
 

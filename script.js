@@ -1,54 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const envelopeWrapper = document.getElementById("envelope-wrapper");
-    const landingScreen = document.getElementById("landing-screen");
-    const contentScreen = document.getElementById("content-screen");
     const guestNameDisplay = document.getElementById("guest-name-display");
     const bgMusic = document.getElementById("bg-music");
+    const vinylBtn = document.getElementById("vinyl-btn");
     
     // Parse URL parameter ?name=...
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Guest";
+    let guestName = urlParams.get("name");
     
     // Formatting the name
-    if(guestNameDisplay) {
-        guestNameDisplay.textContent = `${guestName}`;
-    }
-
-    let opened = false;
-
-    // Open envelope event
-    envelopeWrapper.addEventListener("click", () => {
-        if (opened) return;
+    if (guestNameDisplay && guestName) {
+        guestNameDisplay.textContent = `Liebe(r) ${guestName},`;
         
-        envelopeWrapper.classList.add("open");
-        opened = true;
-        
-        // Play music (might be blocked by browser policy without user interaction, 
-        // but since they clicked the envelope, it should be fine).
-        bgMusic.volume = 0.5;
-        bgMusic.play().catch(e => console.log("Audio play failed:", e));
-
-        // After flap opens (approx 800ms), transition the screens
-        setTimeout(() => {
-            landingScreen.classList.add("fade-out");
-            
-            setTimeout(() => {
-                landingScreen.classList.add("hidden");
-                contentScreen.classList.remove("hidden");
-                contentScreen.classList.add("visible");
-                
-                // Trigger staggered animations for cards
-                const animateCards = document.querySelectorAll('.card-animate');
-                animateCards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.classList.add('visible');
-                    }, index * 200); // 200ms delay between each block
-                });
-
-            }, 1000); // Wait for fade out
-        }, 1000); // Wait for flap to open
-
-        // Notify server that it was opened
+        // Notify server that it was opened (if name is provided)
         fetch('/api/status', {
             method: 'POST',
             headers: {
@@ -56,12 +19,31 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({ name: guestName, opened: true })
         }).catch(err => console.error("Error updating status:", err));
-    });
+    }
+
+    let isPlaying = false;
+
+    // Play/Pause music when clicking vinyl
+    if (vinylBtn && bgMusic) {
+        vinylBtn.addEventListener("click", () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                vinylBtn.classList.remove("playing");
+                isPlaying = false;
+            } else {
+                bgMusic.volume = 0.5;
+                bgMusic.play().then(() => {
+                    vinylBtn.classList.add("playing");
+                    isPlaying = true;
+                }).catch(e => console.log("Audio play failed:", e));
+            }
+        });
+    }
 });
 
 function submitRSVP(status) {
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Guest";
+    let guestName = urlParams.get("name") || "Gast";
 
     fetch('/api/rsvp', {
         method: 'POST',
@@ -73,28 +55,28 @@ function submitRSVP(status) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            document.getElementById("rsvp-section").classList.add("hidden");
+            document.getElementById("rsvp-buttons").classList.add("hidden");
             const responseMsg = document.getElementById("response-msg");
-            responseMsg.parentElement.classList.remove("hidden");
+            responseMsg.classList.remove("hidden");
             
             if (status === 'accepted') {
-                responseMsg.textContent = "We are so excited!";
+                responseMsg.textContent = "Wir freuen uns!";
             } else {
-                responseMsg.textContent = "You will be missed.";
+                responseMsg.textContent = "Schade!";
             }
         }
     })
     .catch(err => {
         // Fallback for GitHub Pages without backend
         console.warn("Backend not found, running fallback response");
-        document.getElementById("rsvp-section").classList.add("hidden");
+        document.getElementById("rsvp-buttons").classList.add("hidden");
         const responseMsg = document.getElementById("response-msg");
-        responseMsg.parentElement.classList.remove("hidden");
+        responseMsg.classList.remove("hidden");
         
         if (status === 'accepted') {
-            responseMsg.textContent = "We are so excited! (Fallback mode)";
+            responseMsg.textContent = "Wir freuen uns! (Nur Demo)";
         } else {
-            responseMsg.textContent = "You will be missed. (Fallback mode)";
+            responseMsg.textContent = "Schade! (Nur Demo)";
         }
     });
 }
