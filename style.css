@@ -16,6 +16,10 @@
     padding: 0;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--black);
@@ -53,6 +57,7 @@ body {
     z-index: 10;
     background: var(--bg-color);
     position: relative;
+    overflow-x: hidden;
 }
 
 .hidden {
@@ -115,7 +120,7 @@ body {
     z-index: 1;
 }
 
-/* Flaps using CSS borders */
+/* Flaps */
 .flap {
     position: absolute;
     width: 100%;
@@ -159,69 +164,37 @@ body {
     z-index: 0;
 }
 
-/* ===================== WAX SEAL (Improved) ===================== */
+/* ===================== WAX SEAL (Image-based) ===================== */
 .wax-seal {
     position: absolute;
-    bottom: -30px;
-    left: calc(50% - 32px);
-    width: 64px;
-    height: 64px;
-    background: radial-gradient(circle at 35% 35%, #333, #0a0a0a 70%);
-    border-radius: 50%;
-    box-shadow:
-        0 3px 8px rgba(0,0,0,0.4),
-        0 8px 20px rgba(0,0,0,0.2),
-        inset 0 2px 4px rgba(255,255,255,0.08),
-        inset 0 -3px 6px rgba(0,0,0,0.5);
+    bottom: -35px;
+    left: calc(50% - 38px);
+    width: 76px;
+    height: 76px;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 0.4s 0.6s, transform 0.3s;
     z-index: 10;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
-/* Outer decorative ring */
-.seal-ring-outer {
+.seal-img {
     position: absolute;
-    width: 56px;
-    height: 56px;
-    border: 1.5px solid rgba(255,255,255,0.15);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     border-radius: 50%;
-}
-
-/* Inner decorative ring */
-.seal-ring-inner {
-    position: absolute;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50%;
-}
-
-/* Decorative dots around the seal */
-.seal-dots {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: transparent;
-    /* Using a radial pattern of dots */
-    background-image:
-        radial-gradient(circle, rgba(255,255,255,0.25) 1px, transparent 1px);
-    background-size: 8px 8px;
-    background-position: center;
-    mask-image: radial-gradient(circle, transparent 18px, black 19px, black 24px, transparent 25px);
-    -webkit-mask-image: radial-gradient(circle, transparent 18px, black 19px, black 24px, transparent 25px);
 }
 
 .seal-initial {
-    color: #fff;
+    position: relative;
+    z-index: 2;
+    color: #111;
     font-family: var(--font-serif);
     font-size: 1.1rem;
     letter-spacing: 1px;
-    position: relative;
-    z-index: 2;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 0 2px rgba(255,255,255,0.3);
 }
 
 .seal-amp {
@@ -243,6 +216,7 @@ body {
     max-width: 500px;
     margin: 0 auto;
     padding: 40px 20px 0;
+    overflow-x: hidden;
 }
 
 .section {
@@ -251,7 +225,8 @@ body {
     align-items: center;
     position: relative;
     margin-bottom: 50px;
-    /* Fade-in on scroll animation */
+    overflow: hidden; /* Prevents flowers from causing horizontal scroll */
+    /* Fade-in on scroll */
     opacity: 0;
     transform: translateY(25px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
@@ -263,11 +238,17 @@ body {
 }
 
 /* ===================== SECTION 1: COUPLE PHOTO ENVELOPE ===================== */
+.envelope-photo-section {
+    overflow: visible; /* Allow flower to peek out slightly */
+    padding: 20px 0;
+}
+
 .photo-envelope {
     position: relative;
     width: min(80vw, 340px);
     height: min(55vw, 230px);
     margin: 0 auto;
+    z-index: 2;
 }
 
 .photo-envelope-back {
@@ -308,33 +289,34 @@ body {
     z-index: 2;
 }
 
-/* Deco Flowers */
+/* Deco Flowers — positioned within section bounds */
 .deco-flower {
     position: absolute;
     filter: grayscale(100%) contrast(1.2) brightness(1.1);
     mix-blend-mode: multiply;
     pointer-events: none;
-    z-index: 3;
+    z-index: 1;
+    max-width: 45%;
 }
 
 .deco-flower-1 {
-    top: -15%;
-    right: -25%;
-    width: min(55vw, 250px);
+    top: -10px;
+    right: -5px;
+    width: 180px;
     transform: rotate(25deg);
 }
 
 .deco-flower-2 {
-    bottom: -20%;
-    left: -30%;
-    width: min(50vw, 200px);
+    bottom: -30px;
+    left: -5px;
+    width: 160px;
     transform: rotate(-15deg);
 }
 
 .deco-flower-3 {
-    top: -10%;
-    right: -20%;
-    width: min(45vw, 180px);
+    top: -10px;
+    right: -5px;
+    width: 150px;
     transform: rotate(-100deg);
 }
 
@@ -418,6 +400,7 @@ body {
 /* ===================== SECTION 3: ARCH (NAMES) CARD ===================== */
 .names-section {
     overflow: visible;
+    padding: 30px 0;
 }
 
 .arch-card {
@@ -468,6 +451,7 @@ body {
 /* ===================== SECTION 4: DATE CARD ===================== */
 .date-section {
     overflow: visible;
+    padding: 15px 0;
 }
 
 .date-card {
