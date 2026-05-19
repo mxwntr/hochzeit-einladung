@@ -114,6 +114,8 @@ body {
     margin-top: 40px;
     text-align: center;
     animation: pulse 2.5s ease-in-out infinite;
+    position: relative;
+    z-index: 20; /* Steht über dem Blumenkranz */
 }
 
 @keyframes pulse {
@@ -130,8 +132,9 @@ body {
 
 .script-text-small {
     font-family: var(--font-script);
-    font-size: 2rem;
-    color: #555;
+    font-size: 2.2rem; /* Minimal größer */
+    color: var(--black); /* Fast schwarz für deutlichen Kontrast */
+    text-shadow: 0 0 12px #f7f7f7, 0 0 6px #f7f7f7; /* Weißer Schein, falls Blätter den Text überlappen */
 }
 
 /* Der Container für den gesamten 3D-Umschlag */
@@ -144,6 +147,7 @@ body {
     /* Passt sich ans Handy an, wird max 380px breit */
     height: min(55vw, 240px);
     margin: 0 auto;
+    z-index: 10; /* Zwingt den Umschlag vor den Blumenkranz (z-index: 1) */
 }
 
 /* Der Umschlag selbst (Hintergrund und Schatten) */
