@@ -760,7 +760,7 @@ body.no-scroll {
 }
 
 .section-divider.divider-gap-large {
-    margin: -10px 0; /* Rückt die Karten näher zusammen für ein gleichmäßiges Gesamtbild */
+    margin: -45px 0; /* Zieht die Blöcke präzise zusammen, damit die Abstände exakt gleich groß sind wie nach der Schallplatte */
 }
 
 .section-divider.divider-left {
