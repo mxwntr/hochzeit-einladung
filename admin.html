@@ -1,111 +1,247 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Hochzeitsgäste</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Gästeliste - Max & Nadja</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #f7f7f7;
+            --paper-white: #ffffff;
+            --black: #111111;
+            --border-color: #e0e0e0;
+        }
+
         body {
+            background-color: var(--bg-color);
+            color: var(--black);
             font-family: 'Montserrat', sans-serif;
-            background-color: #f7f7f7;
-            color: #111;
-            padding: 40px;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            text-transform: uppercase;
+            font-weight: 400;
             letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            text-align: center;
         }
-        table {
+
+        .dashboard {
             width: 100%;
             max-width: 800px;
-            margin: 0 auto;
-            border-collapse: collapse;
-            background: #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            background: var(--paper-white);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
         }
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #111;
-            color: #fff;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-        .status-accepted { color: green; font-weight: 600; }
-        .status-declined { color: red; font-weight: 600; }
-        .status-pending { color: #888; font-style: italic; }
-        .generate-link {
-            max-width: 800px;
-            margin: 0 auto 30px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+        .stats {
             display: flex;
-            gap: 10px;
+            justify-content: space-around;
+            background: #f0f0f0;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
         }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            font-family: inherit;
+
+        .stat-box {
+            text-align: center;
         }
-        button {
-            padding: 10px 20px;
-            background: #111;
-            color: #fff;
-            border: none;
-            cursor: pointer;
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            background: #fafafa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        button:hover {
-            background: #333;
+
+        .status-accepted {
+            background-color: #d4edda;
+            color: #155724;
         }
-        #generated-link {
-            display: block;
-            margin-top: 10px;
-            word-break: break-all;
-            font-size: 0.9rem;
-            color: #444;
+
+        .status-declined {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
         }
     </style>
 </head>
+
 <body>
 
-    <h1>Gästeliste & Status</h1>
+    <h1>Gästeliste Übersicht</h1>
 
-    <div class="generate-link">
-        <div style="width: 100%;">
-            <h3 style="margin-bottom: 10px; font-size: 1rem;">Persönlichen Einladungslink erstellen</h3>
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="guest-name-input" placeholder="Name des Gastes (z.B. Max Mustermann)">
-                <button onclick="generateLink()">Link generieren</button>
+    <div class="dashboard">
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="count-total">0</div>
+                <div class="stat-label">Antworten</div>
             </div>
-            <a id="generated-link" href="#" target="_blank"></a>
+            <div class="stat-box">
+                <div class="stat-number" id="count-accepted" style="color: #155724;">0</div>
+                <div class="stat-label">Zusagen</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="count-declined" style="color: #721c24;">0</div>
+                <div class="stat-label">Absagen</div>
+            </div>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Datum</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td colspan="3" class="loading">Lade Daten aus Firebase...</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Geöffnet</th>
-                <th>Antwort</th>
-            </tr>
-        </thead>
-        <tbody id="guests-tbody">
-            <!-- Guests will be populated here -->
-        </tbody>
-    </table>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-    <script src="admin.js"></script>
+        // Deine Firebase Konfiguration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCP8G5ffseyRk-8LlzuEqfY0gzyKYQnmxU",
+            authDomain: "hochzeit-aafd5.firebaseapp.com",
+            projectId: "hochzeit-aafd5",
+            storageBucket: "hochzeit-aafd5.firebasestorage.app",
+            messagingSenderId: "898718029169",
+            appId: "1:898718029169:web:df7f4727fd20e11fbe92d0",
+            measurementId: "G-R70YD527CW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Echtzeit-Verbindung zur Datenbank (Live-Updates!)
+        const q = query(collection(db, "rsvps"), orderBy("timestamp", "desc"));
+        
+        onSnapshot(q, (snapshot) => {
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = ""; // Tabelle leeren
+
+            let total = 0;
+            let accepted = 0;
+            let declined = 0;
+
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading">Noch keine Antworten erhalten.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                total++;
+
+                // Zeile erstellen
+                const tr = document.createElement("tr");
+
+                // Name
+                const tdName = document.createElement("td");
+                tdName.textContent = data.name || "Unbekannt";
+                tr.appendChild(tdName);
+
+                // Status
+                const tdStatus = document.createElement("td");
+                const badge = document.createElement("span");
+                badge.classList.add("status-badge");
+                if (data.status === "accepted") {
+                    badge.textContent = "Zusage";
+                    badge.classList.add("status-accepted");
+                    accepted++;
+                } else {
+                    badge.textContent = "Absage";
+                    badge.classList.add("status-declined");
+                    declined++;
+                }
+                tdStatus.appendChild(badge);
+                tr.appendChild(tdStatus);
+
+                // Datum
+                const tdDate = document.createElement("td");
+                if (data.timestamp) {
+                    const date = data.timestamp.toDate();
+                    tdDate.textContent = date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+                } else {
+                    tdDate.textContent = "Gerade eben";
+                }
+                tr.appendChild(tdDate);
+
+                tbody.appendChild(tr);
+            });
+
+            // Zähler aktualisieren
+            document.getElementById("count-total").textContent = total;
+            document.getElementById("count-accepted").textContent = accepted;
+            document.getElementById("count-declined").textContent = declined;
+        }, (error) => {
+            console.error("Fehler beim Laden:", error);
+            document.getElementById("table-body").innerHTML = '<tr><td colspan="3" class="loading" style="color:red;">Fehler: Konnte nicht geladen werden.</td></tr>';
+        });
+
+    </script>
 </body>
+
 </html>
