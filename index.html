@@ -12,8 +12,8 @@
         href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
         rel="stylesheet">
 
-    <!-- Cache-Buster hinzugefügt (?v=19) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=19">
+    <!-- Cache-Buster hinzugefügt (?v=20) damit Handys das neue CSS laden! -->
+    <link rel="stylesheet" href="style.css?v=20">
 </head>
 
 <body class="no-scroll">
@@ -106,11 +106,17 @@
                         <div class="date-year">2026</div>
                         <div class="divider"></div>
                         <div class="date-details">
-                            UM 10 UHR<br>
-                            STANDESAMT RATINGEN<br><br>
-                            ANSCHLIESSEND<br>
-                            RESTAURANTE MILANO<br>
-                            RATINGEN LINTORF
+                            <span class="detail-label">UM 10 UHR</span>
+                            <span class="location-name">STANDESAMT RATINGEN</span>
+                            <span class="location-address">Minoritenstraße 2a, 40878 Ratingen</span>
+                            <a href="https://maps.google.com/?q=Standesamt+Ratingen,+Minoritenstraße+2a,+40878+Ratingen" target="_blank" class="maps-btn">Auf Google Maps anzeigen</a>
+                            
+                            <div class="card-spacer"></div>
+                            
+                            <span class="detail-label">ANSCHLIESSEND</span>
+                            <span class="location-name">RISTORANTE MILANO</span>
+                            <span class="location-address">Speestraße 9, 40885 Ratingen</span>
+                            <a href="https://maps.google.com/?q=Ristorante+Milano,+Speestraße+9,+40885+Ratingen" target="_blank" class="maps-btn">Auf Google Maps anzeigen</a>
                         </div>
                     </div>
                 </div>
@@ -128,10 +134,22 @@
                     <div class="rsvp-seal">M&N</div>
                     <p class="rsvp-title">Um Antwort</p>
                     <p class="rsvp-script">wird gebeten</p>
+                    
                     <div class="rsvp-buttons" id="rsvp-buttons">
-                        <button onclick="submitRSVP('accepted')">Zusagen</button>
+                        <button onclick="showMealChoice()">Zusagen</button>
                         <button onclick="submitRSVP('declined')">Absagen</button>
                     </div>
+
+                    <!-- Essensauswahl (wird nach Klick auf Zusagen angezeigt) -->
+                    <div id="meal-selection" class="meal-selection hidden">
+                        <p class="meal-title">Hauptgang wählen:</p>
+                        <div class="meal-buttons">
+                            <button onclick="submitRSVP('accepted', 'Rinderfilet')">Rinderfilet</button>
+                            <button onclick="submitRSVP('accepted', 'Lachsfilet')">Lachsfilet</button>
+                            <button onclick="submitRSVP('accepted', 'Vegetarisch')">Vegetarisch</button>
+                        </div>
+                    </div>
+
                     <p id="response-msg" class="response-msg hidden"></p>
                     <button id="calendar-btn" class="calendar-btn hidden" onclick="addToCalendar()">In den
                         Kalender eintragen</button>
@@ -185,7 +203,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=19"></script>
+    <script src="script.js?v=20"></script>
 </body>
 
 </html>

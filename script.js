@@ -163,12 +163,19 @@ function observeSections() {
     });
 }
 
-function submitRSVP(status) {
+function showMealChoice() {
+    document.getElementById("rsvp-buttons").classList.add("hidden");
+    document.getElementById("meal-selection").classList.remove("hidden");
+}
+
+function submitRSVP(status, meal = "") {
     const urlParams = new URLSearchParams(window.location.search);
     let guestName = urlParams.get("name") || "Gast ohne Namen";
 
-    // Buttons verstecken, damit nicht doppelt geklickt wird
+    // Buttons und Essensauswahl verstecken, damit nicht doppelt geklickt wird
     document.getElementById("rsvp-buttons").classList.add("hidden");
+    document.getElementById("meal-selection").classList.add("hidden");
+    
     const responseMsg = document.getElementById("response-msg");
     responseMsg.classList.remove("hidden");
     responseMsg.textContent = "Speichere Antwort...";
@@ -178,6 +185,7 @@ function submitRSVP(status) {
         window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "rsvps"), {
             name: guestName,
             status: status,
+            meal: meal, // Das gewählte Essen wird mit abgespeichert
             timestamp: window.firebaseServerTimestamp()
         }).then(() => {
             // Erfolgreich gespeichert!
@@ -206,8 +214,8 @@ function addToCalendar() {
         const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
             "&text=" + encodeURIComponent("Hochzeit von Max & Nadja") +
             "&dates=20260826T080000Z/20260826T220000Z" +
-            "&details=" + encodeURIComponent("Wir heiraten!\n\n10:00 Uhr: Standesamt Ratingen\nAnschließend: Restaurante Milano, Ratingen Lintorf\n\nWir freuen uns sehr auf euch!") +
-            "&location=" + encodeURIComponent("Standesamt Ratingen, Ratingen, Deutschland");
+            "&details=" + encodeURIComponent("Wir heiraten!\n\n10:00 Uhr: Standesamt Ratingen (Minoritenstraße 2a, 40878 Ratingen)\nAnschließend: Ristorante Milano (Speestraße 9, 40885 Ratingen)\n\nWir freuen uns sehr auf euch!") +
+            "&location=" + encodeURIComponent("Minoritenstraße 2a, 40878 Ratingen, Deutschland");
         window.open(googleCalendarUrl, "_blank");
     } else {
         // Für iOS (iPhone/iPad) und Desktop lädt die fertige .ics Datei herunter und öffnet direkt den nativen Kalender

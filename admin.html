@@ -346,18 +346,34 @@
                     <div class="stat-label">Absagen</div>
                 </div>
             </div>
-
+            
+            <div class="stats" style="border-top: 1px solid var(--border-color); background: #fafafa; padding: 15px 20px;">
+                <div class="stat-box">
+                    <div class="stat-number" id="count-beef" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Rinderfilet</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="count-salmon" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Lachsfilet</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="count-veg" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Vegetarisch</div>
+                </div>
+            </div>
+ 
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Status</th>
+                        <th>Hauptgang</th>
                         <th>Datum</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
                     <tr>
-                        <td colspan="3" class="loading">Lade Daten aus Firebase...</td>
+                        <td colspan="4" class="loading">Lade Daten aus Firebase...</td>
                     </tr>
                 </tbody>
             </table>
@@ -454,9 +470,12 @@
             let total = 0;
             let accepted = 0;
             let declined = 0;
+            let beef = 0;
+            let salmon = 0;
+            let veg = 0;
 
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="3" class="loading">Noch keine Antworten erhalten.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="loading">Noch keine Antworten erhalten.</td></tr>';
                 return;
             }
 
@@ -480,6 +499,11 @@
                     badge.textContent = "Zusage";
                     badge.classList.add("status-accepted");
                     accepted++;
+                    
+                    // Essenswunsch zählen
+                    if (data.meal === "Rinderfilet") beef++;
+                    else if (data.meal === "Lachsfilet") salmon++;
+                    else if (data.meal === "Vegetarisch") veg++;
                 } else {
                     badge.textContent = "Absage";
                     badge.classList.add("status-declined");
@@ -487,6 +511,11 @@
                 }
                 tdStatus.appendChild(badge);
                 tr.appendChild(tdStatus);
+
+                // Hauptgang
+                const tdMeal = document.createElement("td");
+                tdMeal.textContent = data.status === "accepted" ? (data.meal || "Nicht gewählt") : "-";
+                tr.appendChild(tdMeal);
 
                 // Datum
                 const tdDate = document.createElement("td");
@@ -505,9 +534,12 @@
             document.getElementById("count-total").textContent = total;
             document.getElementById("count-accepted").textContent = accepted;
             document.getElementById("count-declined").textContent = declined;
+            document.getElementById("count-beef").textContent = beef;
+            document.getElementById("count-salmon").textContent = salmon;
+            document.getElementById("count-veg").textContent = veg;
         }, (error) => {
             console.error("Fehler beim Laden:", error);
-            document.getElementById("table-body").innerHTML = '<tr><td colspan="3" class="loading" style="color:red;">Fehler: Konnte nicht geladen werden.</td></tr>';
+            document.getElementById("table-body").innerHTML = '<tr><td colspan="4" class="loading" style="color:red;">Fehler: Konnte nicht geladen werden.</td></tr>';
         });
 
     </script>

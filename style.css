@@ -664,9 +664,63 @@ body.no-scroll {
 }
 
 .date-details {
-    font-size: min(3vw, 0.7rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.detail-label {
+    font-size: min(2.8vw, 0.65rem);
     letter-spacing: 1.5px;
-    line-height: 1.9;
+    color: #888;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.location-name {
+    font-family: var(--font-serif);
+    font-size: min(4vw, 0.9rem);
+    letter-spacing: 1px;
+    color: var(--black);
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.location-address {
+    font-size: min(2.8vw, 0.65rem);
+    color: #555;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.maps-btn {
+    display: inline-block;
+    border: 1px solid var(--black);
+    color: var(--black);
+    background: transparent;
+    padding: 6px 14px;
+    font-family: var(--font-sans);
+    font-size: min(2.5vw, 0.55rem);
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.maps-btn:hover {
+    background: var(--black);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.card-spacer {
+    height: 1px;
+    width: 50px;
+    background-color: var(--border-color);
+    margin: 20px 0;
 }
 
 
@@ -818,6 +872,50 @@ body.no-scroll {
 .rsvp-buttons button:hover {
     background: var(--black);
     /* Wird schwarz beim Drüberfahren */
+    color: #fff;
+}
+
+/* Essensauswahl Layout */
+.meal-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.meal-title {
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.meal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.meal-buttons button {
+    background: transparent;
+    border: 1px solid var(--black);
+    padding: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.meal-buttons button:hover {
+    background: var(--black);
     color: #fff;
 }
 
