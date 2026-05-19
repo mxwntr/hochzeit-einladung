@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             responseMsg.classList.remove("hidden");
                             if (data.status === 'accepted') {
                                 responseMsg.textContent = "Du hast bereits zugesagt. Wir freuen uns auf euch!";
+                                const calendarBtn = document.getElementById("calendar-btn");
+                                if (calendarBtn) calendarBtn.classList.remove("hidden");
                             } else {
                                 responseMsg.textContent = "Du hast bereits abgesagt. Schade!";
                             }
@@ -163,6 +165,8 @@ function submitRSVP(status) {
             // Erfolgreich gespeichert!
             if (status === 'accepted') {
                 responseMsg.textContent = "Wir freuen uns auf euch!";
+                const calendarBtn = document.getElementById("calendar-btn");
+                if (calendarBtn) calendarBtn.classList.remove("hidden");
             } else {
                 responseMsg.textContent = "Schade, ihr werdet uns fehlen!";
             }
@@ -174,4 +178,33 @@ function submitRSVP(status) {
         console.error("Firebase ist nicht initialisiert.");
         responseMsg.textContent = "Datenbank-Fehler. Bitte sagt uns per WhatsApp Bescheid!";
     }
+}
+
+// Kalender-Download Funktion (.ics)
+function downloadCalendarEvent() {
+    const calendarContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Max und Nadja//Hochzeit//DE",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        "UID:hochzeit-max-nadja-2026",
+        "DTSTAMP:20260519T120000Z",
+        "DTSTART;TZID=Europe/Berlin:20260826T100000",
+        "DTEND;TZID=Europe/Berlin:20260826T235900",
+        "SUMMARY:Hochzeit von Max & Nadja",
+        "DESCRIPTION:Wir freuen uns riesig auf euch!\\n\\nAblauf:\\n- 10:00 Uhr: Standesamt Ratingen\\n- Anschliessend: Restaurante Milano in Ratingen Lintorf",
+        "LOCATION:Standesamt Ratingen, Ratingen, Deutschland",
+        "END:VEVENT",
+        "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([calendarContent], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "Hochzeit_Max_und_Nadja.ics";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
