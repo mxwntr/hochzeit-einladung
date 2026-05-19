@@ -689,11 +689,31 @@ body {
     justify-content: center;
     align-items: center;
     font-family: var(--font-script);
-    font-size: 1rem; /* Schriftgröße leicht angepasst für bessere Lesbarkeit */
+    font-size: 1.3rem; /* Etwas größer für bessere Lesbarkeit */
     position: absolute;
     top: -32px;             /* Halb so viel wie die Höhe, damit es genau auf der Kante sitzt */
     left: calc(50% - 32px); /* Zentriert den 64px breiten Kreis */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    
+    /* Visuelle Korrektur für die Pinyon Script Schrift, da diese stark nach rechts und oben neigt */
+    padding-top: 6px;
+    padding-right: 4px;
+}
+
+/* Blumen-Trenner zwischen den Sektionen */
+.section-divider {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0; /* Großzügige Abstände nach oben/unten */
+    opacity: 0.8;
+}
+
+.section-divider img {
+    max-width: 120px; /* Passt die Größe der Trenner-Blumen an */
+    height: auto;
+    object-fit: contain;
 }
 
 .rsvp-title {
