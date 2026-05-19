@@ -424,8 +424,10 @@ body {
 /* --- 2. Sektion: Schallplatte (Musik-Player) --- */
 .vinyl-section {
     margin-bottom: 30px;
-    overflow: visible; /* WICHTIG: Verhindert, dass der Schatten abgeschnitten wird! */
-    padding: 20px;     /* Gibt dem Schatten etwas Platz zum "Atmen" */
+    overflow: visible;
+    /* WICHTIG: Verhindert, dass der Schatten abgeschnitten wird! */
+    padding: 20px;
+    /* Gibt dem Schatten etwas Platz zum "Atmen" */
 }
 
 .vinyl-record {
@@ -653,6 +655,11 @@ body {
 
 
 /* --- 6. Sektion: Zu- und Absage (RSVP) --- */
+.rsvp-section-wrapper {
+    overflow: visible; /* WICHTIG: Verhindert, dass das kleine schwarze Siegel abgeschnitten wird! */
+    padding-top: 20px; /* Platz für das Siegel nach oben */
+}
+
 .rsvp-card {
     width: min(75vw, 300px);
     background: var(--paper-white);
