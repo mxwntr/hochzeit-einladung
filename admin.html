@@ -192,6 +192,111 @@
             margin-top: 15px;
             font-weight: 500;
         }
+
+        /* --- Generator Styles --- */
+        .generator-card {
+            width: 100%;
+            max-width: 800px;
+            background: var(--paper-white);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+        }
+
+        .generator-card h2 {
+            font-weight: 400;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .generator-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .generator-form input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .generator-form button {
+            padding: 12px 25px;
+            background: var(--black);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            transition: background 0.3s;
+            font-family: inherit;
+        }
+
+        .generator-form button:hover {
+            background: #333;
+        }
+
+        .result-box {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+            font-size: 0.95rem;
+            word-break: break-all;
+        }
+
+        .result-box button {
+            background: none;
+            border: 1px solid var(--black);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            margin-left: 15px;
+            font-family: inherit;
+        }
+
+        .result-box button:hover {
+            background: var(--black);
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .generator-form {
+                flex-direction: column;
+            }
+            .result-box {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .result-box button {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -210,6 +315,21 @@
     <!-- Haupt-Dashboard (wird erst nach richtigem Passwort sichtbar) -->
     <div id="admin-content" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
         <h1>Gästeliste Übersicht</h1>
+
+        <!-- Einladungs-Link Generator -->
+        <div class="generator-card">
+            <h2>Link Generator</h2>
+            <div class="generator-form">
+                <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()">
+                <button onclick="generateLink()">Link erstellen</button>
+            </div>
+            <div id="result-wrapper" class="hidden">
+                <div class="result-box">
+                    <span id="generated-link-text"></span>
+                    <button onclick="copyGeneratedLink()" id="copy-btn">Kopieren</button>
+                </div>
+            </div>
+        </div>
 
         <div class="dashboard">
             <div class="stats">
@@ -262,6 +382,38 @@
                 errorMsg.classList.remove("hidden");
                 passwordInput.value = "";
             }
+        }
+
+        // Link Generator Funktionen
+        function generateLink() {
+            const guestNameInput = document.getElementById("guest-name-input");
+            const resultWrapper = document.getElementById("result-wrapper");
+            const linkText = document.getElementById("generated-link-text");
+            const copyBtn = document.getElementById("copy-btn");
+
+            if (!guestNameInput.value.trim()) return;
+
+            // URL ermitteln
+            const currentUrl = window.location.href;
+            // admin.html abschneiden, um auf index.html zu linken
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/';
+            const encodedName = encodeURIComponent(guestNameInput.value.trim());
+            const fullLink = `${baseUrl}?name=${encodedName}`;
+
+            linkText.textContent = fullLink;
+            copyBtn.textContent = "Kopieren";
+            resultWrapper.classList.remove("hidden");
+        }
+
+        function copyGeneratedLink() {
+            const linkText = document.getElementById("generated-link-text").textContent;
+            const copyBtn = document.getElementById("copy-btn");
+
+            navigator.clipboard.writeText(linkText).then(() => {
+                copyBtn.textContent = "Kopiert!";
+            }).catch(err => {
+                console.error("Fehler beim Kopieren:", err);
+            });
         }
 
         // Session prüfen
