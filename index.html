@@ -4,56 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hochzeitseinladung</title>
+    
+    <!-- Google Fonts for elegant editorial look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500;600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Audio element for background music -->
-    <!-- Using a placeholder classical music URL. You can replace this with your own local file -->
+    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_f823e2fb7c.mp3?filename=piano-moment-9835.mp3" type="audio/mpeg">
-        Ihr Browser unterstützt kein Audio.
     </audio>
 
-    <div class="container">
-        <div class="envelope-wrapper" id="envelope-wrapper">
+    <!-- LANDING SCREEN (Envelope) -->
+    <div id="landing-screen" class="screen active">
+        
+        <div class="intro-text">
+            <span class="script-text">Introducing</span><br>
+            <span class="serif-text">the WILSONS</span>
+        </div>
+
+        <div class="envelope-container" id="envelope-wrapper">
+            <!-- Decorative Flower (Calla Lily placeholder) -->
+            <img src="https://cdn.pixabay.com/photo/2020/02/12/04/16/flower-4841641_1280.png" alt="Flower" class="deco-flower" style="mix-blend-mode: multiply; filter: grayscale(1) contrast(1.2);">
+
             <div class="envelope">
                 <div class="flap top" id="flap">
                     <div class="wax-seal" id="wax-seal">
-                        <span>W & M</span>
+                        <span class="seal-initial">W</span>
                     </div>
                 </div>
                 <div class="flap right"></div>
                 <div class="flap left"></div>
                 <div class="flap bottom"></div>
-                
-                <div class="letter" id="letter">
-                    <div class="letter-content">
-                        <div class="names-header">Wir heiraten!</div>
-                        <h1 class="guest-name" id="guest-name">Lieber Gast,</h1>
-                        <p class="invitation-text">
-                            wir freuen uns sehr, diesen besonderen Tag mit dir zu verbringen.
-                            <br><br>
-                            <strong>Wann:</strong> 20. August 2027<br>
-                            <strong>Wo:</strong> Schloss Schönbrunn, Wien
-                        </p>
-                        
-                        <div class="rsvp-section" id="rsvp-section">
-                            <p>Bitte gib uns bis zum 01. Juni Bescheid:</p>
-                            <div class="buttons">
-                                <button class="btn accept" onclick="submitRSVP('accepted')">Zusagen</button>
-                                <button class="btn decline" onclick="submitRSVP('declined')">Absagen</button>
-                            </div>
-                        </div>
-                        <div id="rsvp-response" class="hidden">
-                            <p class="response-msg" id="response-msg"></p>
-                        </div>
+            </div>
+        </div>
+
+        <div class="click-hint">
+            <span class="script-text-small">Click to open...</span>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT SCREEN (Editorial Scroll) -->
+    <div id="content-screen" class="screen hidden">
+        
+        <div class="editorial-layout">
+            
+            <!-- Row 1: Main invite cards -->
+            <div class="grid-row offset-right">
+                <div class="card black-card card-animate">
+                    <p class="subtitle">PLEASE JOIN US<br>FOR THE WEDDING OF</p>
+                    <h2 class="names">LIAM<br><span class="and-script">and</span><br>ARIANA</h2>
+                    <!-- Personalized Guest Name will be injected here -->
+                    <p class="guest-name-display" id="guest-name-display"></p>
+                </div>
+                <div class="card white-card shift-down card-animate">
+                    <h3 class="date-script">April</h3>
+                    <div class="date-year">2027</div>
+                    <p class="details-text">
+                        AT 3PM<br>
+                        TANTALUS ESTATE,<br>
+                        WAIHEKE ISLAND
+                    </p>
+                </div>
+            </div>
+
+            <!-- Row 2: Circular badge -->
+            <div class="badge-container card-animate">
+                <div class="circle-badge">
+                    <span>CLICK<br>FOR THE<br>DETAILS</span>
+                </div>
+            </div>
+
+            <!-- Row 3: RSVP and Photos -->
+            <div class="grid-row staggered card-animate">
+                <div class="card rsvp-card">
+                    <div class="mini-seal">L&A</div>
+                    <p class="rsvp-title">KINDLY<br><span class="rsvp-script">RSVP</span><br>HERE</p>
+                    
+                    <div id="rsvp-section" class="rsvp-buttons">
+                        <button class="btn accept" onclick="submitRSVP('accepted')">ACCEPT</button>
+                        <button class="btn decline" onclick="submitRSVP('declined')">DECLINE</button>
+                    </div>
+                    <div id="rsvp-response" class="hidden">
+                        <p class="response-msg" id="response-msg"></p>
+                    </div>
+                </div>
+
+                <div class="polaroid-stack">
+                    <div class="polaroid p1">
+                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0a1?auto=format&fit=crop&w=400&q=80" alt="Couple 1">
+                        <p>CLICK FOR</p>
+                    </div>
+                    <div class="polaroid p2">
+                        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400&q=80" alt="Couple 2">
+                        <p>OUR LOVE STORY</p>
                     </div>
                 </div>
             </div>
+
         </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>WITH LOVE & GRATITUDE.<br><span class="footer-names">LIAM AND ARIANA</span></p>
+        </footer>
+
     </div>
 
     <script src="script.js"></script>

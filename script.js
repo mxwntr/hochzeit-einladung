@@ -1,14 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
     const envelopeWrapper = document.getElementById("envelope-wrapper");
-    const guestNameEl = document.getElementById("guest-name");
+    const landingScreen = document.getElementById("landing-screen");
+    const contentScreen = document.getElementById("content-screen");
+    const guestNameDisplay = document.getElementById("guest-name-display");
     const bgMusic = document.getElementById("bg-music");
     
     // Parse URL parameter ?name=...
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Gast";
+    let guestName = urlParams.get("name") || "Guest";
     
     // Formatting the name
-    guestNameEl.textContent = `Liebe(r) ${guestName},`;
+    if(guestNameDisplay) {
+        guestNameDisplay.textContent = `${guestName}`;
+    }
 
     let opened = false;
 
@@ -24,6 +28,26 @@ document.addEventListener("DOMContentLoaded", () => {
         bgMusic.volume = 0.5;
         bgMusic.play().catch(e => console.log("Audio play failed:", e));
 
+        // After flap opens (approx 800ms), transition the screens
+        setTimeout(() => {
+            landingScreen.classList.add("fade-out");
+            
+            setTimeout(() => {
+                landingScreen.classList.add("hidden");
+                contentScreen.classList.remove("hidden");
+                contentScreen.classList.add("visible");
+                
+                // Trigger staggered animations for cards
+                const animateCards = document.querySelectorAll('.card-animate');
+                animateCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 200); // 200ms delay between each block
+                });
+
+            }, 1000); // Wait for fade out
+        }, 1000); // Wait for flap to open
+
         // Notify server that it was opened
         fetch('/api/status', {
             method: 'POST',
@@ -37,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function submitRSVP(status) {
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Gast";
+    let guestName = urlParams.get("name") || "Guest";
 
     fetch('/api/rsvp', {
         method: 'POST',
@@ -54,11 +78,23 @@ function submitRSVP(status) {
             responseMsg.parentElement.classList.remove("hidden");
             
             if (status === 'accepted') {
-                responseMsg.textContent = "Wir freuen uns auf dich!";
+                responseMsg.textContent = "We are so excited!";
             } else {
-                responseMsg.textContent = "Schade, dass du nicht dabei sein kannst.";
+                responseMsg.textContent = "You will be missed.";
             }
         }
     })
-    .catch(err => console.error("Error submitting RSVP:", err));
+    .catch(err => {
+        // Fallback for GitHub Pages without backend
+        console.warn("Backend not found, running fallback response");
+        document.getElementById("rsvp-section").classList.add("hidden");
+        const responseMsg = document.getElementById("response-msg");
+        responseMsg.parentElement.classList.remove("hidden");
+        
+        if (status === 'accepted') {
+            responseMsg.textContent = "We are so excited! (Fallback mode)";
+        } else {
+            responseMsg.textContent = "You will be missed. (Fallback mode)";
+        }
+    });
 }
