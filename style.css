@@ -650,14 +650,16 @@ body {
 .monogram-letters {
     font-family: var(--font-serif);
     font-size: min(10vw, 2.8rem);
-    letter-spacing: 5px;
+    letter-spacing: -2px;
 }
 
 
 /* --- 6. Sektion: Zu- und Absage (RSVP) --- */
 .rsvp-section-wrapper {
-    overflow: visible; /* WICHTIG: Verhindert, dass das kleine schwarze Siegel abgeschnitten wird! */
-    padding-top: 20px; /* Platz für das Siegel nach oben */
+    overflow: visible;
+    /* WICHTIG: Verhindert, dass das kleine schwarze Siegel abgeschnitten wird! */
+    padding-top: 20px;
+    /* Platz für das Siegel nach oben */
 }
 
 .rsvp-card {
@@ -673,8 +675,8 @@ body {
 
 /* Das kleine schwarze Siegel oben auf der RSVP Karte */
 .rsvp-seal {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background: #222;
     border-radius: 50%;
     color: #fff;
@@ -684,8 +686,8 @@ body {
     font-family: var(--font-script);
     font-size: 0.9rem;
     position: absolute;
-    top: -20px;
-    left: calc(50% - 20px);
+    top: -25px;             /* Halb so viel wie die Höhe, damit es genau auf der Kante sitzt */
+    left: calc(50% - 25px); /* Zentriert den 50px breiten Kreis */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -693,7 +695,7 @@ body {
     font-family: var(--font-serif);
     font-size: 0.9rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: -2px;
 }
 
 .rsvp-script {
