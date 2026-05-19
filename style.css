@@ -213,18 +213,23 @@ body {
 
 /* ===================== INVITATION SCROLL ===================== */
 .invitation-scroll {
+    width: 100%;
     max-width: 500px;
     margin: 0 auto;
-    padding: 40px 20px 0;
+    padding: 20px 20px 0;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .section {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-bottom: 50px;
+    margin-bottom: 30px; /* Reduced margin to bring elements closer */
     overflow: hidden; /* Prevents flowers from causing horizontal scroll */
     /* Fade-in on scroll */
     opacity: 0;
