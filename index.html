@@ -12,8 +12,8 @@
         href="https://fonts.googleapis.com/css2?family=Italiana&family=Montserrat:wght@300;400;500&family=Pinyon+Script&display=swap"
         rel="stylesheet">
 
-    <!-- Cache-Buster hinzugefügt (?v=22) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=22">
+    <!-- Cache-Buster hinzugefügt (?v=23) damit Handys das neue CSS laden! -->
+    <link rel="stylesheet" href="style.css?v=23">
 </head>
 
 <body class="no-scroll">
@@ -153,10 +153,11 @@
                     <!-- Paarauswahl (wird angezeigt bei guests=2 nach Klick auf Zusagen) -->
                     <div id="couple-selection" class="meal-selection hidden">
                         <p class="meal-title">Wer kommt von euch?</p>
-                        <div class="meal-buttons">
-                            <button onclick="selectCoupleAttendance(2)">Wir kommen beide</button>
-                            <button onclick="selectCoupleAttendance(1)">Nur einer kommt</button>
+                        <div class="meal-buttons" style="flex-direction: column; gap: 8px;">
+                            <button id="btn-attendee-1" onclick="toggleAttendee(1)" class="attendance-toggle selected">Person 1 kommt</button>
+                            <button id="btn-attendee-2" onclick="toggleAttendee(2)" class="attendance-toggle selected">Person 2 kommt</button>
                         </div>
+                        <button onclick="confirmCoupleAttendance()" class="couple-submit-btn" style="margin-top: 15px; width: 100%;">Weiter</button>
                     </div>
 
                     <!-- Hauptgänge für Paare (wird nach Auswahl oben angezeigt) -->
@@ -170,7 +171,7 @@
                             </div>
                         </div>
                         <div id="guest2-meal-row" class="meal-row">
-                            <p class="meal-row-title">Hauptgang Person 2:</p>
+                            <p id="guest2-row-title" class="meal-row-title">Hauptgang Person 2:</p>
                             <div class="meal-option-row">
                                 <button type="button" onclick="selectMeal(2, 'Rinderfilet', this)">Rinderfilet</button>
                                 <button type="button" onclick="selectMeal(2, 'Lachsfilet', this)">Lachsfilet</button>
@@ -233,7 +234,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=22"></script>
+    <script src="script.js?v=23"></script>
 </body>
 
 </html>

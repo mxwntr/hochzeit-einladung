@@ -7,9 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const bgMusic = document.getElementById("bg-music");
     const vinylBtn = document.getElementById("vinyl-btn");
 
-    // Parse URL parameter ?name=...
+    // Parse URL parameter ?name=... or ?name1=...&name2=...
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name");
+    const name1 = urlParams.get("name1");
+    const name2 = urlParams.get("name2");
+    let guestName = "";
+
+    if (name1 && name2) {
+        guestName = `${name1} & ${name2}`;
+    } else {
+        guestName = urlParams.get("name") || name1;
+    }
 
     // ZUGRIFFSKONTROLLE: Wenn kein Name vorhanden ist, Seite sperren
     if (!guestName) {
@@ -165,9 +173,14 @@ function observeSections() {
 
 function handleZusageClick() {
     const urlParams = new URLSearchParams(window.location.search);
-    const isCouple = urlParams.get("guests") === "2";
+    const name1 = urlParams.get("name1");
+    const name2 = urlParams.get("name2");
     
-    if (isCouple) {
+    if (name1 && name2) {
+        // Paarknöpfe beschriften
+        document.getElementById("btn-attendee-1").textContent = `${name1} kommt`;
+        document.getElementById("btn-attendee-2").textContent = `${name2} kommt`;
+        
         document.getElementById("rsvp-buttons").classList.add("hidden");
         document.getElementById("couple-selection").classList.remove("hidden");
     } else {
@@ -176,19 +189,30 @@ function handleZusageClick() {
     }
 }
 
-let coupleAttendance = 0;
+let attendee1Attending = true;
+let attendee2Attending = true;
 let guest1Meal = "";
 let guest2Meal = "";
 
-function selectCoupleAttendance(count) {
-    coupleAttendance = count;
-    guest1Meal = "";
-    guest2Meal = "";
-    
-    // Zuvor getroffene Essensauswahlen der Paarknöpfe zurücksetzen
-    document.querySelectorAll("#couple-meal-selection .meal-option-row button").forEach(btn => {
-        btn.classList.remove("selected");
-    });
+function toggleAttendee(num) {
+    if (num === 1) {
+        attendee1Attending = !attendee1Attending;
+        const btn = document.getElementById("btn-attendee-1");
+        if (attendee1Attending) btn.classList.add("selected");
+        else btn.classList.remove("selected");
+    } else {
+        attendee2Attending = !attendee2Attending;
+        const btn = document.getElementById("btn-attendee-2");
+        if (attendee2Attending) btn.classList.add("selected");
+        else btn.classList.remove("selected");
+    }
+}
+
+function confirmCoupleAttendance() {
+    if (!attendee1Attending && !attendee2Attending) {
+        alert("Bitte wähle mindestens eine Person aus, die zusagt. Wenn niemand kommt, klicke bitte auf 'Absagen'.");
+        return;
+    }
     
     // Verstecke die Paarauswahl-Frage
     document.getElementById("couple-selection").classList.add("hidden");
@@ -196,15 +220,32 @@ function selectCoupleAttendance(count) {
     // Blende Essensauswahl ein
     document.getElementById("couple-meal-selection").classList.remove("hidden");
     
-    const guest2Row = document.getElementById("guest2-meal-row");
-    const guest1RowTitle = document.getElementById("guest1-row-title");
+    const urlParams = new URLSearchParams(window.location.search);
+    const name1 = urlParams.get("name1") || "Person 1";
+    const name2 = urlParams.get("name2") || "Person 2";
     
-    if (count === 1) {
-        guest2Row.classList.add("hidden");
-        guest1RowTitle.textContent = "Hauptgang wählen:";
+    const row1 = document.getElementById("guest1-meal-row");
+    const row2 = document.getElementById("guest2-meal-row");
+    
+    // Zuvor getroffene Auswahlen löschen
+    guest1Meal = "";
+    guest2Meal = "";
+    document.querySelectorAll("#couple-meal-selection .meal-option-row button").forEach(btn => {
+        btn.classList.remove("selected");
+    });
+    
+    if (attendee1Attending) {
+        row1.classList.remove("hidden");
+        document.getElementById("guest1-row-title").textContent = `Hauptgang für ${name1}:`;
     } else {
-        guest2Row.classList.remove("hidden");
-        guest1RowTitle.textContent = "Hauptgang Person 1:";
+        row1.classList.add("hidden");
+    }
+    
+    if (attendee2Attending) {
+        row2.classList.remove("hidden");
+        document.getElementById("guest2-row-title").textContent = `Hauptgang für ${name2}:`;
+    } else {
+        row2.classList.add("hidden");
     }
 }
 
@@ -223,31 +264,59 @@ function selectMeal(guestNum, meal, btnElement) {
 }
 
 function submitCoupleRSVP() {
-    if (coupleAttendance === 2) {
-        if (!guest1Meal || !guest2Meal) {
-            alert("Bitte wähle für beide Personen einen Hauptgang aus!");
-            return;
-        }
-        const combinedMeal = `${guest1Meal} & ${guest2Meal}`;
-        submitRSVP('accepted', combinedMeal, 2);
-    } else if (coupleAttendance === 1) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const name1 = urlParams.get("name1") || "Person 1";
+    const name2 = urlParams.get("name2") || "Person 2";
+
+    let count = 0;
+    let parts = [];
+    let attendingNamesList = [];
+    
+    if (attendee1Attending) {
         if (!guest1Meal) {
-            alert("Bitte wähle einen Hauptgang aus!");
+            alert(`Bitte wähle einen Hauptgang für ${name1} aus!`);
             return;
         }
-        const combinedMeal = `${guest1Meal} (1 Person)`;
-        submitRSVP('accepted', combinedMeal, 1);
+        parts.push(`${name1}: ${guest1Meal}`);
+        attendingNamesList.push(name1);
+        count++;
     }
+    
+    if (attendee2Attending) {
+        if (!guest2Meal) {
+            alert(`Bitte wähle einen Hauptgang für ${name2} aus!`);
+            return;
+        }
+        parts.push(`${name2}: ${guest2Meal}`);
+        attendingNamesList.push(name2);
+        count++;
+    }
+    
+    const combinedMeal = parts.join(" | ");
+    const attendingNames = attendingNamesList.join(" & ");
+    submitRSVP('accepted', combinedMeal, count, attendingNames);
 }
 
-function submitRSVP(status, meal = "", guestsCount = 1) {
+function submitRSVP(status, meal = "", guestsCount = 1, attendingNames = "") {
     const urlParams = new URLSearchParams(window.location.search);
-    let guestName = urlParams.get("name") || "Gast ohne Namen";
-    const isCouple = urlParams.get("guests") === "2";
+    const name1 = urlParams.get("name1");
+    const name2 = urlParams.get("name2");
+    
+    let guestName = "";
+    if (name1 && name2) {
+        guestName = `${name1} & ${name2}`;
+    } else {
+        guestName = urlParams.get("name") || name1 || "Gast ohne Namen";
+    }
+    
+    const isCouple = (name1 && name2) || urlParams.get("guests") === "2";
 
     // Bei einer Absage die passende Personenanzahl festlegen
     if (status === 'declined') {
         guestsCount = isCouple ? 2 : 1;
+        attendingNames = ""; // Keiner kommt
+    } else if (!attendingNames) {
+        attendingNames = guestName; // Standardmäßig kommt der eingeladene Einzelgast
     }
 
     // Alle möglichen Buttons und Auswahlen verstecken
@@ -264,8 +333,9 @@ function submitRSVP(status, meal = "", guestsCount = 1) {
     if (window.firebaseDB && window.firebaseAddDoc) {
         window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "rsvps"), {
             name: guestName,
+            attendingNames: attendingNames, // Namen derer, die tatsächlich zugesagt haben
             status: status,
-            meal: meal, // Das gewählte Essen (bei Paaren kombiniert)
+            meal: meal, // Das gewählte Essen (bei Paaren kombiniert, z.B. Erika: Rinderfilet | Max: Vegetarisch)
             guestsCount: guestsCount, // Anzahl der Personen, die zu- oder absagen
             timestamp: window.firebaseServerTimestamp()
         }).then(() => {

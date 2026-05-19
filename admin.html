@@ -319,10 +319,18 @@
         <!-- Einladungs-Link Generator -->
         <div class="generator-card">
             <h2>Link Generator</h2>
-            <div class="generator-form" style="flex-wrap: wrap; align-items: center;">
+            <div class="generator-form" style="flex-wrap: wrap; align-items: center; gap: 15px;">
+                <!-- Einzelgast Feld -->
                 <input type="text" id="guest-name-input" placeholder="Name des Gasts (z.B. Oma & Opa oder Familie Schmidt)" onkeydown="if(event.key === 'Enter') generateLink()" style="flex: 1; min-width: 250px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="is-couple-checkbox" style="width: auto; margin: 0; cursor: pointer;">
+                
+                <!-- Paargast Felder (standardmäßig versteckt) -->
+                <div id="couple-names-inputs" class="hidden" style="display: none; gap: 10px; flex: 1; min-width: 250px;">
+                    <input type="text" id="guest-name1-input" placeholder="Name Person 1 (z.B. Erika)" style="flex: 1;">
+                    <input type="text" id="guest-name2-input" placeholder="Name Person 2 (z.B. Max)" style="flex: 1;">
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 8px; white-space: nowrap;">
+                    <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: auto; margin: 0; cursor: pointer;">
                     <label for="is-couple-checkbox" style="font-size: 0.85rem; cursor: pointer; user-select: none;">2 Personen (Paar)</label>
                 </div>
                 <button onclick="generateLink()">Link erstellen</button>
@@ -405,24 +413,49 @@
         }
 
         // Link Generator Funktionen
+        function toggleLinkGeneratorInputs() {
+            const isCouple = document.getElementById("is-couple-checkbox").checked;
+            const singleInput = document.getElementById("guest-name-input");
+            const coupleInputs = document.getElementById("couple-names-inputs");
+            
+            if (isCouple) {
+                singleInput.classList.add("hidden");
+                coupleInputs.classList.remove("hidden");
+                coupleInputs.style.display = "flex";
+            } else {
+                singleInput.classList.remove("hidden");
+                coupleInputs.classList.add("hidden");
+                coupleInputs.style.display = "none";
+            }
+        }
+
         function generateLink() {
-            const guestNameInput = document.getElementById("guest-name-input");
-            const isCoupleCheckbox = document.getElementById("is-couple-checkbox");
+            const isCouple = document.getElementById("is-couple-checkbox").checked;
             const resultWrapper = document.getElementById("result-wrapper");
             const linkText = document.getElementById("generated-link-text");
             const copyBtn = document.getElementById("copy-btn");
-
-            if (!guestNameInput.value.trim()) return;
 
             // URL ermitteln
             const currentUrl = window.location.href;
             // admin.html abschneiden, um auf index.html zu linken
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/';
-            const encodedName = encodeURIComponent(guestNameInput.value.trim());
-            let fullLink = `${baseUrl}?name=${encodedName}`;
-            
-            if (isCoupleCheckbox.checked) {
-                fullLink += `&guests=2`;
+            let fullLink = "";
+
+            if (isCouple) {
+                const name1 = document.getElementById("guest-name1-input").value.trim();
+                const name2 = document.getElementById("guest-name2-input").value.trim();
+                if (!name1 || !name2) {
+                    alert("Bitte gib beide Namen ein!");
+                    return;
+                }
+                fullLink = `${baseUrl}?name1=${encodeURIComponent(name1)}&name2=${encodeURIComponent(name2)}&guests=2`;
+            } else {
+                const name = document.getElementById("guest-name-input").value.trim();
+                if (!name) {
+                    alert("Bitte gib einen Namen ein!");
+                    return;
+                }
+                fullLink = `${baseUrl}?name=${encodeURIComponent(name)}`;
             }
 
             linkText.textContent = fullLink;
@@ -497,7 +530,11 @@
 
                 // Name
                 const tdName = document.createElement("td");
-                tdName.textContent = data.name || "Unbekannt";
+                if (data.status === "accepted" && data.attendingNames && data.attendingNames !== data.name) {
+                    tdName.textContent = `${data.name} (${data.attendingNames} kommt)`;
+                } else {
+                    tdName.textContent = data.name || "Unbekannt";
+                }
                 tr.appendChild(tdName);
 
                 // Status
