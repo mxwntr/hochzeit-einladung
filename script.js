@@ -234,6 +234,12 @@ function confirmCoupleAttendance() {
         btn.classList.remove("selected");
     });
     
+    // Schnitzel-Config-Panels zurücksetzen/verstecken
+    const config1 = document.getElementById("schnitzel-config-guest1");
+    const config2 = document.getElementById("schnitzel-config-guest2");
+    if (config1) config1.classList.add("hidden");
+    if (config2) config2.classList.add("hidden");
+    
     if (attendee1Attending) {
         row1.classList.remove("hidden");
         document.getElementById("guest1-row-title").textContent = `Hauptgang für ${name1}:`;
@@ -249,17 +255,75 @@ function confirmCoupleAttendance() {
     }
 }
 
+// Status für Schnitzel-Optionen:
+// Index 0: Einzelgast
+// Index 1: Person 1 (Paar)
+// Index 2: Person 2 (Paar)
+const schnitzelConfig = {
+    0: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' },
+    1: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' },
+    2: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' }
+};
+
+function setSchnitzelOpt(index, field, value, btnElement) {
+    schnitzelConfig[index][field] = value;
+    
+    // Aktiven Button optisch hervorheben
+    const row = btnElement.parentElement;
+    row.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+    btnElement.classList.add("selected");
+    
+    // Wenn es sich um ein Paar handelt, den ausgewählten Text aktualisieren
+    if (index === 1) {
+        guest1Meal = `Schnitzel (${schnitzelConfig[1].type}, ${schnitzelConfig[1].style}, ${schnitzelConfig[1].side})`;
+    } else if (index === 2) {
+        guest2Meal = `Schnitzel (${schnitzelConfig[2].type}, ${schnitzelConfig[2].style}, ${schnitzelConfig[2].side})`;
+    }
+}
+
+function showSchnitzelConfig(index, btnElement) {
+    const mealButtons = btnElement.parentElement;
+    mealButtons.querySelectorAll(".meal-btn-card").forEach(btn => btn.classList.remove("selected"));
+    btnElement.classList.add("selected");
+    
+    const configPanel = document.getElementById("schnitzel-config-single");
+    if (configPanel) configPanel.classList.remove("hidden");
+}
+
+function hideSingleSchnitzelConfig() {
+    const configPanel = document.getElementById("schnitzel-config-single");
+    if (configPanel) configPanel.classList.add("hidden");
+}
+
+function submitSingleSchnitzel() {
+    const mealText = `Schnitzel (${schnitzelConfig[0].type}, ${schnitzelConfig[0].style}, ${schnitzelConfig[0].side})`;
+    submitRSVP('accepted', mealText, 1);
+}
+
 function selectMeal(guestNum, meal, btnElement) {
     const row = btnElement.parentElement;
-    row.querySelectorAll("button").forEach(btn => {
+    row.querySelectorAll(".meal-btn-card").forEach(btn => {
         btn.classList.remove("selected");
     });
     btnElement.classList.add("selected");
     
-    if (guestNum === 1) {
-        guest1Meal = meal;
+    const configId = `schnitzel-config-guest${guestNum}`;
+    const configPanel = document.getElementById(configId);
+
+    if (meal === 'Schnitzel') {
+        if (configPanel) configPanel.classList.remove("hidden");
+        if (guestNum === 1) {
+            guest1Meal = `Schnitzel (${schnitzelConfig[1].type}, ${schnitzelConfig[1].style}, ${schnitzelConfig[1].side})`;
+        } else {
+            guest2Meal = `Schnitzel (${schnitzelConfig[2].type}, ${schnitzelConfig[2].style}, ${schnitzelConfig[2].side})`;
+        }
     } else {
-        guest2Meal = meal;
+        if (configPanel) configPanel.classList.add("hidden");
+        if (guestNum === 1) {
+            guest1Meal = meal;
+        } else {
+            guest2Meal = meal;
+        }
     }
 }
 
@@ -364,7 +428,7 @@ function addToCalendar() {
 
 // Google Kalender-Funktion (öffnet den Google Kalender direkt im Web/App)
 function addToGoogleCalendar() {
-    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Hochzeit+von+Max+%26+Nadja&dates=20260826T080000Z/20260826T220000Z&details=Wir+heiraten%21%0A%0A10%3A00+Uhr%3A+Standesamt+Ratingen+%28Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%29%0AAnschlie%C3%9Fend%3A+Ristorante+Milano+%28Speestra%C3%9Fe+9%2C+40885+Ratingen%29%0A%0AWir+freuen+uns+sehr+auf+euch%21&location=Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%2C+Deutschland";
+    const url = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Hochzeit+von+Max+%26+Nadja&dates=20260826T080000Z/20260826T220000Z&details=Wir+heiraten%21%0A%0A10%3A00+Uhr%3A+Standesamt+Ratingen+%28Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%29%0AAnschlie%C3%9Fend%3A+Gastst%C3%A4tte+Meck+%28Lintorfer+Markt+18%2C+40885+Lintorf%29%0A%0AWir+freuen+uns+sehr+auf+euch%21&location=Minoritenstra%C3%9Fe+2a%2C+40878+Ratingen%2C+Deutschland";
     window.open(url, "_blank");
 }
 
@@ -375,7 +439,7 @@ function openMaps(location) {
     if (location === 'standesamt') {
         address = "Minoritenstraße 2a, 40878 Ratingen, Germany";
     } else {
-        address = "Speestraße 9, 40885 Ratingen, Germany";
+        address = "Lintorfer Markt 18, 40885 Lintorf, Germany";
     }
     
     let url = "";
@@ -392,3 +456,7 @@ function openMaps(location) {
 window.openMaps = openMaps;
 window.addToCalendar = addToCalendar;
 window.addToGoogleCalendar = addToGoogleCalendar;
+window.setSchnitzelOpt = setSchnitzelOpt;
+window.showSchnitzelConfig = showSchnitzelConfig;
+window.hideSingleSchnitzelConfig = hideSingleSchnitzelConfig;
+window.submitSingleSchnitzel = submitSingleSchnitzel;

@@ -371,16 +371,16 @@
             
             <div class="stats" style="border-top: 1px solid var(--border-color); background: #fafafa; padding: 15px 20px;">
                 <div class="stat-box">
-                    <div class="stat-number" id="count-tagliata" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Tagliata</div>
+                    <div class="stat-number" id="count-schnitzel" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Schnitzel</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="count-tagliatelle" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Tagliatelle Bologn.</div>
+                    <div class="stat-number" id="count-pasta" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Trüffelpasta</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number" id="count-pizza" style="font-size: 1.3rem;">0</div>
-                    <div class="stat-label" style="font-size: 0.65rem;">Pizza Venezia</div>
+                    <div class="stat-number" id="count-salat" style="font-size: 1.3rem;">0</div>
+                    <div class="stat-label" style="font-size: 0.65rem;">Ziegenkäse-Salat</div>
                 </div>
             </div>
  
@@ -524,9 +524,9 @@
             let total = 0;
             let accepted = 0;
             let declined = 0;
-            let tagliata = 0;
-            let tagliatelle = 0;
-            let pizza = 0;
+            let schnitzel = 0;
+            let pasta = 0;
+            let salat = 0;
 
             if (snapshot.empty) {
                 tbody.innerHTML = '<tr><td colspan="4" class="loading">Noch keine Antworten erhalten.</td></tr>';
@@ -559,11 +559,11 @@
                     badge.classList.add("status-accepted");
                     accepted += count;
                     
-                    // Essenswunsch per Regex zählen (falls kombiniert wie "Tagliata & Pizza Venezia")
+                    // Essenswunsch per Regex zählen (falls kombiniert wie "Erika: Schnitzel... | Max: Trüffelpasta...")
                     if (data.meal) {
-                        tagliata += (data.meal.match(/Tagliata|Rinderfilet/g) || []).length;
-                        tagliatelle += (data.meal.match(/Tagliatelle Bolognese|Lachsfilet/g) || []).length;
-                        pizza += (data.meal.match(/Pizza Venezia|Vegetarisch/g) || []).length;
+                        schnitzel += (data.meal.match(/Schnitzel/gi) || []).length;
+                        pasta += (data.meal.match(/Trüffelpasta/gi) || []).length;
+                        salat += (data.meal.match(/Blattsalat/gi) || []).length;
                     }
                 } else {
                     const count = data.guestsCount !== undefined ? data.guestsCount : 1;
@@ -604,9 +604,9 @@
             document.getElementById("count-total").textContent = total;
             document.getElementById("count-accepted").textContent = accepted;
             document.getElementById("count-declined").textContent = declined;
-            document.getElementById("count-tagliata").textContent = tagliata;
-            document.getElementById("count-tagliatelle").textContent = tagliatelle;
-            document.getElementById("count-pizza").textContent = pizza;
+            document.getElementById("count-schnitzel").textContent = schnitzel;
+            document.getElementById("count-pasta").textContent = pasta;
+            document.getElementById("count-salat").textContent = salat;
         }, (error) => {
             console.error("Fehler beim Laden:", error);
             document.getElementById("table-body").innerHTML = '<tr><td colspan="4" class="loading" style="color:red;">Fehler: Konnte nicht geladen werden.</td></tr>';

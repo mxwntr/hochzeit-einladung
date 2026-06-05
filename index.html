@@ -14,7 +14,7 @@
         rel="stylesheet">
 
     <!-- Cache-Buster hinzugefügt (?v=25) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=25">
+    <link rel="stylesheet" href="style.css?v=26">
 </head>
 
 <body class="no-scroll">
@@ -115,9 +115,9 @@
                             <div class="card-spacer"></div>
                             
                             <span class="detail-label">ANSCHLIESSEND</span>
-                            <span class="location-name">RISTORANTE MILANO</span>
-                            <span class="location-address">Speestraße 9, 40885 Ratingen</span>
-                            <button onclick="openMaps('milano')" class="maps-btn">Auf Karte anzeigen</button>
+                            <span class="location-name">GASTSTÄTTE MECK</span>
+                            <span class="location-address">Lintorfer Markt 18, 40885 Lintorf</span>
+                            <button onclick="openMaps('meck')" class="maps-btn">Auf Karte anzeigen</button>
                         </div>
                     </div>
                 </div>
@@ -145,18 +145,46 @@
                     <div id="meal-selection" class="meal-selection hidden">
                         <p class="meal-title">Hauptgang wählen:</p>
                         <div class="meal-buttons">
-                            <button onclick="submitRSVP('accepted', 'Pizza Venezia', 1)" class="meal-btn-card">
-                                <span class="meal-btn-title">Pizza Venezia</span>
-                                <span class="meal-btn-desc">mit Tomatensauce, Käse, Tomaten, Rucola und Parmesan</span>
+                            <button onclick="hideSingleSchnitzelConfig(); submitRSVP('accepted', 'Trüffelpasta mit frisch geriebenem Trüffel & Parmesan', 1)" class="meal-btn-card">
+                                <span class="meal-btn-title">Trüffelpasta</span>
+                                <span class="meal-btn-desc">mit frisch geriebenem Trüffel & Parmesan</span>
                             </button>
-                            <button onclick="submitRSVP('accepted', 'Tagliatelle Bolognese', 1)" class="meal-btn-card">
-                                <span class="meal-btn-title">Tagliatelle Bolognese</span>
-                                <span class="meal-btn-desc">hausgekochte Bolognese aus Rindfleisch</span>
+                            <button onclick="hideSingleSchnitzelConfig(); submitRSVP('accepted', 'Bunter Blattsalat mit gratiniertem Ziegenkäse & Beerendressing', 1)" class="meal-btn-card">
+                                <span class="meal-btn-title">Bunter Blattsalat</span>
+                                <span class="meal-btn-desc">mit in Honig gratiniertem Ziegenkäse und veg. Beerendressing</span>
                             </button>
-                            <button onclick="submitRSVP('accepted', 'Tagliata', 1)" class="meal-btn-card">
-                                <span class="meal-btn-title">Tagliata</span>
-                                <span class="meal-btn-desc">Gebratenes in Scheiben geschnittenes Rumpsteak auf Rucola und Parmesan</span>
+                            <button type="button" onclick="showSchnitzelConfig(0, this)" class="meal-btn-card" id="schnitzel-btn-single">
+                                <span class="meal-btn-title">Schnitzel</span>
+                                <span class="meal-btn-desc">mit Pommes/Bratkartoffeln (Lintorfer Krüstchen, Jäger, Wiener, Oma / auch Vegi)</span>
                             </button>
+                            
+                            <!-- Schnitzel Sub-Konfiguration für Einzelgast -->
+                            <div id="schnitzel-config-single" class="schnitzel-options hidden">
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Variante:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(0, 'type', 'Klassisch', this)">Klassisch</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(0, 'type', 'Vegetarisch', this)">Vegi</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Zubereitung:</span>
+                                    <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Jäger-Art', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Wiener Art', this)">Wiener</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Oma Art', this)">Oma</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Beilage:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(0, 'side', 'Pommes', this)">Pommes</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(0, 'side', 'Bratkartoffeln', this)">Bratkartoffeln</button>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="submitSingleSchnitzel()" class="couple-submit-btn" style="margin-top: 5px; width: 100%;">Zusage absenden</button>
+                            </div>
                         </div>
                     </div>
 
@@ -175,35 +203,87 @@
                         <div id="guest1-meal-row" class="meal-row">
                             <p id="guest1-row-title" class="meal-row-title">Hauptgang Person 1:</p>
                             <div class="meal-option-row">
-                                <button type="button" onclick="selectMeal(1, 'Pizza Venezia', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Pizza Venezia</span>
-                                    <span class="meal-btn-desc">mit Tomatensauce, Käse, Tomaten, Rucola und Parmesan</span>
+                                <button type="button" onclick="selectMeal(1, 'Trüffelpasta mit frisch geriebenem Trüffel & Parmesan', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Trüffelpasta</span>
+                                    <span class="meal-btn-desc">mit frisch geriebenem Trüffel & Parmesan</span>
                                 </button>
-                                <button type="button" onclick="selectMeal(1, 'Tagliatelle Bolognese', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Tagliatelle Bolognese</span>
-                                    <span class="meal-btn-desc">hausgekochte Bolognese aus Rindfleisch</span>
+                                <button type="button" onclick="selectMeal(1, 'Bunter Blattsalat mit gratiniertem Ziegenkäse & Beerendressing', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Bunter Blattsalat</span>
+                                    <span class="meal-btn-desc">mit in Honig gratiniertem Ziegenkäse und veg. Beerendressing</span>
                                 </button>
-                                <button type="button" onclick="selectMeal(1, 'Tagliata', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Tagliata</span>
-                                    <span class="meal-btn-desc">Gebratenes in Scheiben geschnittenes Rumpsteak auf Rucola und Parmesan</span>
+                                <button type="button" onclick="selectMeal(1, 'Schnitzel', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Schnitzel</span>
+                                    <span class="meal-btn-desc">mit Pommes/Bratkartoffeln (nach Wahl)</span>
                                 </button>
+                            </div>
+                            <!-- Schnitzel Sub-Konfiguration für Person 1 -->
+                            <div id="schnitzel-config-guest1" class="schnitzel-options hidden" style="margin-top: 8px;">
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Variante:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(1, 'type', 'Klassisch', this)">Klassisch</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(1, 'type', 'Vegetarisch', this)">Vegi</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Zubereitung:</span>
+                                    <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Jäger-Art', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Wiener Art', this)">Wiener</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Oma Art', this)">Oma</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Beilage:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(1, 'side', 'Pommes', this)">Pommes</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(1, 'side', 'Bratkartoffeln', this)">Bratkartoffeln</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="guest2-meal-row" class="meal-row">
                             <p id="guest2-row-title" class="meal-row-title">Hauptgang Person 2:</p>
                             <div class="meal-option-row">
-                                <button type="button" onclick="selectMeal(2, 'Pizza Venezia', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Pizza Venezia</span>
-                                    <span class="meal-btn-desc">mit Tomatensauce, Käse, Tomaten, Rucola und Parmesan</span>
+                                <button type="button" onclick="selectMeal(2, 'Trüffelpasta mit frisch geriebenem Trüffel & Parmesan', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Trüffelpasta</span>
+                                    <span class="meal-btn-desc">mit frisch geriebenem Trüffel & Parmesan</span>
                                 </button>
-                                <button type="button" onclick="selectMeal(2, 'Tagliatelle Bolognese', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Tagliatelle Bolognese</span>
-                                    <span class="meal-btn-desc">hausgekochte Bolognese aus Rindfleisch</span>
+                                <button type="button" onclick="selectMeal(2, 'Bunter Blattsalat mit gratiniertem Ziegenkäse & Beerendressing', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Bunter Blattsalat</span>
+                                    <span class="meal-btn-desc">mit in Honig gratiniertem Ziegenkäse und veg. Beerendressing</span>
                                 </button>
-                                <button type="button" onclick="selectMeal(2, 'Tagliata', this)" class="meal-btn-card">
-                                    <span class="meal-btn-title">Tagliata</span>
-                                    <span class="meal-btn-desc">Gebratenes in Scheiben geschnittenes Rumpsteak auf Rucola und Parmesan</span>
+                                <button type="button" onclick="selectMeal(2, 'Schnitzel', this)" class="meal-btn-card">
+                                    <span class="meal-btn-title">Schnitzel</span>
+                                    <span class="meal-btn-desc">mit Pommes/Bratkartoffeln (nach Wahl)</span>
                                 </button>
+                            </div>
+                            <!-- Schnitzel Sub-Konfiguration für Person 2 -->
+                            <div id="schnitzel-config-guest2" class="schnitzel-options hidden" style="margin-top: 8px;">
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Variante:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(2, 'type', 'Klassisch', this)">Klassisch</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(2, 'type', 'Vegetarisch', this)">Vegi</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Zubereitung:</span>
+                                    <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Jäger-Art', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Wiener Art', this)">Wiener</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Oma Art', this)">Oma</button>
+                                    </div>
+                                </div>
+                                <div class="schnitzel-opt-group">
+                                    <span class="schnitzel-opt-label">Beilage:</span>
+                                    <div class="schnitzel-opt-buttons">
+                                        <button type="button" class="schnitzel-opt-btn selected" onclick="setSchnitzelOpt(2, 'side', 'Pommes', this)">Pommes</button>
+                                        <button type="button" class="schnitzel-opt-btn" onclick="setSchnitzelOpt(2, 'side', 'Bratkartoffeln', this)">Bratkartoffeln</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <button id="couple-submit-btn" onclick="submitCoupleRSVP()" class="couple-submit-btn" style="margin-top: 15px; width: 100%;">Zusage absenden</button>
@@ -267,7 +347,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=25"></script>
+    <script src="script.js?v=26"></script>
 </body>
 
 </html>
