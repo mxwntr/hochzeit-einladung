@@ -450,23 +450,22 @@ function addToGoogleCalendar() {
 
 // Maps-Funktion: Öffnet die native Maps-App (Apple Maps auf iOS, Google Maps auf Android/PC) ohne Login-Zwang
 function openMaps(location) {
-    const isIOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
-    let address = "";
     if (location === 'standesamt') {
-        address = "Minoritenstraße 2a, 40878 Ratingen, Germany";
+        const isIOS = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+        const address = "Minoritenstraße 2a, 40878 Ratingen, Germany";
+        let url = "";
+        if (isIOS) {
+            // Öffnet Apple Maps App direkt auf Apple Geräten
+            url = "https://maps.apple.com/?q=" + encodeURIComponent(address);
+        } else {
+            // Die standardisierte Google Maps API-URL startet auf Android direkt die Maps-App und verlangt KEIN Login
+            url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+        }
+        window.open(url, "_blank");
     } else {
-        address = "Lintorfer Markt 18, 40885 Lintorf, Germany";
+        // Gaststätte Meck: Direktlink auf den Google Maps Eintrag
+        window.open("https://maps.app.goo.gl/56SDxuUPBQt5r1NT7", "_blank");
     }
-    
-    let url = "";
-    if (isIOS) {
-        // Öffnet Apple Maps App direkt auf Apple Geräten
-        url = "https://maps.apple.com/?q=" + encodeURIComponent(address);
-    } else {
-        // Die standardisierte Google Maps API-URL startet auf Android direkt die Maps-App und verlangt KEIN Login
-        url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-    }
-    window.open(url, "_blank");
 }
 
 window.openMaps = openMaps;
