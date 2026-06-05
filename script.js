@@ -260,9 +260,17 @@ function confirmCoupleAttendance() {
 // Index 1: Person 1 (Paar)
 // Index 2: Person 2 (Paar)
 const schnitzelConfig = {
-    0: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' },
-    1: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' },
-    2: { type: 'Klassisch', style: 'Lintorfer-Krüstchen (Spiegelei & Salat)', side: 'Pommes' }
+    0: { type: 'Klassisch', style: 'Lintorfer-Krüstchen', side: 'Pommes' },
+    1: { type: 'Klassisch', style: 'Lintorfer-Krüstchen', side: 'Pommes' },
+    2: { type: 'Klassisch', style: 'Lintorfer-Krüstchen', side: 'Pommes' }
+};
+
+// Beschreibungstexte für die Zubereitungsarten
+const schnitzelStyleDescriptions = {
+    'Lintorfer-Krüstchen': 'Mit einem Spiegelei und Salat',
+    'Jägerschnitzel': 'Mit deftiger Champignon-Rahmsauce',
+    'Wiener Art': 'Der Klassiker mit Preiselbeeren',
+    'Schnitzel wie von Oma': 'Mit einem Spiegelei und Schmorzwiebeln'
 };
 
 function setSchnitzelOpt(index, field, value, btnElement) {
@@ -272,6 +280,14 @@ function setSchnitzelOpt(index, field, value, btnElement) {
     const row = btnElement.parentElement;
     row.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
     btnElement.classList.add("selected");
+    
+    // Beschreibungstext live aktualisieren
+    if (field === 'style') {
+        const descEl = document.getElementById(`schnitzel-desc-text-${index}`);
+        if (descEl) {
+            descEl.textContent = schnitzelStyleDescriptions[value] || '';
+        }
+    }
     
     // Wenn es sich um ein Paar handelt, den ausgewählten Text aktualisieren
     if (index === 1) {

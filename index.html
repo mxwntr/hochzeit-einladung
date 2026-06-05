@@ -14,7 +14,7 @@
         rel="stylesheet">
 
     <!-- Cache-Buster hinzugefügt (?v=25) damit Handys das neue CSS laden! -->
-    <link rel="stylesheet" href="style.css?v=26">
+    <link rel="stylesheet" href="style.css?v=27">
 </head>
 
 <body class="no-scroll">
@@ -170,11 +170,12 @@
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Zubereitung:</span>
                                     <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
-                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Jäger-Art', this)">Jäger</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Wiener Art', this)">Wiener</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Oma Art', this)">Oma</button>
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Lintorfer-Krüstchen', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Jägerschnitzel', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Wiener Art', this)">Wiener Art</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(0, 'style', 'Schnitzel wie von Oma', this)">Wie von Oma</button>
                                     </div>
+                                    <span id="schnitzel-desc-text-0" style="font-size: 0.62rem; color: #555; font-style: italic; margin-top: 4px; display: block; text-align: center; letter-spacing: 0.5px;">Mit einem Spiegelei und Salat</span>
                                 </div>
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Beilage:</span>
@@ -228,11 +229,12 @@
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Zubereitung:</span>
                                     <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
-                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Jäger-Art', this)">Jäger</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Wiener Art', this)">Wiener</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Oma Art', this)">Oma</button>
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Lintorfer-Krüstchen', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Jägerschnitzel', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Wiener Art', this)">Wiener Art</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(1, 'style', 'Schnitzel wie von Oma', this)">Wie von Oma</button>
                                     </div>
+                                    <span id="schnitzel-desc-text-1" style="font-size: 0.62rem; color: #555; font-style: italic; margin-top: 4px; display: block; text-align: center; letter-spacing: 0.5px;">Mit einem Spiegelei und Salat</span>
                                 </div>
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Beilage:</span>
@@ -271,11 +273,12 @@
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Zubereitung:</span>
                                     <div class="schnitzel-opt-buttons" style="flex-wrap: wrap; gap: 4px;">
-                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Lintorfer-Krüstchen (Spiegelei & Salat)', this)">Lintorfer-Krüstchen</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Jäger-Art', this)">Jäger</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Wiener Art', this)">Wiener</button>
-                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Oma Art', this)">Oma</button>
+                                        <button type="button" class="schnitzel-opt-btn selected" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Lintorfer-Krüstchen', this)">Lintorfer-Krüstchen</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Jägerschnitzel', this)">Jäger</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Wiener Art', this)">Wiener Art</button>
+                                        <button type="button" class="schnitzel-opt-btn" style="flex: unset; padding: 6px 10px;" onclick="setSchnitzelOpt(2, 'style', 'Schnitzel wie von Oma', this)">Wie von Oma</button>
                                     </div>
+                                    <span id="schnitzel-desc-text-2" style="font-size: 0.62rem; color: #555; font-style: italic; margin-top: 4px; display: block; text-align: center; letter-spacing: 0.5px;">Mit einem Spiegelei und Salat</span>
                                 </div>
                                 <div class="schnitzel-opt-group">
                                     <span class="schnitzel-opt-label">Beilage:</span>
@@ -347,7 +350,7 @@
         window.firebaseGetDocs = getDocs;
         window.firebaseLimit = limit;
     </script>
-    <script src="script.js?v=26"></script>
+    <script src="script.js?v=27"></script>
 </body>
 
 </html>
