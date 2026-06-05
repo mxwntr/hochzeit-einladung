@@ -301,6 +301,82 @@
                 width: 100%;
             }
         }
+
+        /* --- Generator Tabs & Batch Mode --- */
+        .generator-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        .generator-tab {
+            padding: 10px 5px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        .generator-tab.active {
+            border-bottom-color: var(--black);
+            color: var(--black);
+            font-weight: 600;
+        }
+        .batch-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            animation: rsvpFadeIn 0.3s ease-out;
+        }
+        .batch-form textarea {
+            width: 100%;
+            height: 120px;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .batch-info {
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.5;
+            background: #fcfcfc;
+            padding: 12px;
+            border-left: 3px solid #ccc;
+            border-radius: 2px;
+        }
+        .action-btn {
+            background: none;
+            border: 1px solid var(--black);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: var(--black);
+            color: white;
+        }
+        .action-btn.danger {
+            border-color: #721c24;
+            color: #721c24;
+        }
+        .action-btn.danger:hover {
+            background: #721c24;
+            color: white;
+        }
     </style>
 </head>
 
@@ -323,7 +399,15 @@
         <!-- Einladungs-Link Generator -->
         <div class="generator-card">
             <h2>Link Generator</h2>
-            <div class="generator-form">
+
+            <!-- Tab Navigation -->
+            <div class="generator-tabs">
+                <div class="generator-tab active" id="tab-single" onclick="switchGeneratorTab('single')">Einzeln erstellen</div>
+                <div class="generator-tab" id="tab-batch" onclick="switchGeneratorTab('batch')">Mehrere erstellen (Batch)</div>
+            </div>
+
+            <!-- Single Generator Form -->
+            <div id="single-generator" class="generator-form">
                 <!-- Zeile 1: Name(n) Eingabefelder -->
                 <div style="width: 100%;">
                     <!-- Einzelgast Feld -->
@@ -342,14 +426,50 @@
                         <input type="checkbox" id="is-couple-checkbox" onchange="toggleLinkGeneratorInputs()" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
                         <label for="is-couple-checkbox" style="font-size: 0.9rem; cursor: pointer; color: #444; font-weight: 500;">2 Personen (Paar) einladen</label>
                     </div>
-                    <button onclick="generateLink()" style="padding: 12px 25px; min-width: 180px;">Link erstellen</button>
+                    <button onclick="generateLink()" style="padding: 12px 25px; min-width: 180px;">Link erstellen & speichern</button>
                 </div>
             </div>
-            <div id="result-wrapper" class="hidden">
+
+            <!-- Batch Generator Form -->
+            <div id="batch-generator" class="batch-form hidden">
+                <div class="batch-info">
+                    <strong>Tipp für Paare:</strong> Gib Namen auf einer Zeile getrennt durch ein Komma ein (z. B. <code>Erika, Max</code>), um den Paar-Modus zu aktivieren.<br>
+                    Einzelgäste oder Gruppen einfach normal aufschreiben (z. B. <code>Oma & Opa</code> oder <code>Familie Schmidt</code>). Ein Gast/Paar pro Zeile.
+                </div>
+                <textarea id="batch-names-input" placeholder="Oma & Opa&#10;Erika, Max&#10;Familie Schmidt"></textarea>
+                <button onclick="generateBatchLinks()" class="batch-generate-btn" style="padding: 12px; background: var(--black); color: white; border: none; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-weight: 500; letter-spacing: 1px; font-family: inherit;">Batch-Links erstellen & speichern</button>
+            </div>
+
+            <div id="result-wrapper" class="hidden" style="margin-top: 20px;">
                 <div class="result-box">
                     <span id="generated-link-text"></span>
                     <button onclick="copyGeneratedLink()" id="copy-btn">Kopieren</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Gespeicherte Einladungs-Links -->
+        <div class="generator-card">
+            <h2>Gespeicherte Einladungs-Links</h2>
+            <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <input type="text" id="search-links-input" placeholder="Nach Name suchen..." oninput="filterLinks()" style="padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; flex: 1; min-width: 180px; box-sizing: border-box; margin: 0;">
+                <button onclick="clearAllLinks()" class="clear-all-btn action-btn danger" style="padding: 10px 15px; font-weight: 600;">Alle Links löschen</button>
+            </div>
+            <div style="width: 100%; overflow-x: auto; max-height: 350px; border: 1px solid var(--border-color); border-radius: 4px;">
+                <table style="width: 100%; min-width: 500px; border-collapse: collapse; margin: 0;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 12px 15px; background: #fafafa; border-bottom: 2px solid var(--border-color); width: 35%; font-size: 0.8rem; text-align: left;">Name</th>
+                            <th style="padding: 12px 15px; background: #fafafa; border-bottom: 2px solid var(--border-color); width: 45%; font-size: 0.8rem; text-align: left;">Link</th>
+                            <th style="padding: 12px 15px; background: #fafafa; border-bottom: 2px solid var(--border-color); width: 20%; text-align: center; font-size: 0.8rem;">Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="links-table-body">
+                        <tr>
+                            <td colspan="3" class="loading" style="padding: 20px; text-align: center;">Lade gespeicherte Links...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -424,6 +544,29 @@
             }
         }
 
+        // Tab-Umschaltung
+        function switchGeneratorTab(tab) {
+            const tabSingle = document.getElementById("tab-single");
+            const tabBatch = document.getElementById("tab-batch");
+            const singleGen = document.getElementById("single-generator");
+            const batchGen = document.getElementById("batch-generator");
+            const resultWrapper = document.getElementById("result-wrapper");
+
+            if (resultWrapper) resultWrapper.classList.add("hidden");
+
+            if (tab === 'single') {
+                tabSingle.classList.add("active");
+                tabBatch.classList.remove("active");
+                singleGen.classList.remove("hidden");
+                batchGen.classList.add("hidden");
+            } else {
+                tabSingle.classList.remove("active");
+                tabBatch.classList.add("active");
+                singleGen.classList.add("hidden");
+                batchGen.classList.remove("hidden");
+            }
+        }
+
         // Link Generator Funktionen
         function toggleLinkGeneratorInputs() {
             const isCouple = document.getElementById("is-couple-checkbox").checked;
@@ -441,6 +584,21 @@
             }
         }
 
+        // Hilfsfunktion zum Speichern der Links in Firebase
+        async function saveLinkToFirebase(name, url) {
+            if (window.firebaseDB && window.firebaseAddDoc && window.firebaseCollection) {
+                try {
+                    await window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "invite_links"), {
+                        name: name,
+                        url: url,
+                        timestamp: window.firebaseServerTimestamp ? window.firebaseServerTimestamp() : new Date()
+                    });
+                } catch (e) {
+                    console.error("Fehler beim Speichern des Links:", e);
+                }
+            }
+        }
+
         function generateLink() {
             const isCouple = document.getElementById("is-couple-checkbox").checked;
             const resultWrapper = document.getElementById("result-wrapper");
@@ -452,6 +610,7 @@
             // admin.html abschneiden, um auf index.html zu linken
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/';
             let fullLink = "";
+            let displayName = "";
 
             if (isCouple) {
                 const name1 = document.getElementById("guest-name1-input").value.trim();
@@ -460,19 +619,85 @@
                     alert("Bitte gib beide Namen ein!");
                     return;
                 }
+                displayName = `${name1} & ${name2} (Paar)`;
                 fullLink = `${baseUrl}?name1=${encodeURIComponent(name1)}&name2=${encodeURIComponent(name2)}&guests=2`;
+                
+                // Inputs leeren
+                document.getElementById("guest-name1-input").value = "";
+                document.getElementById("guest-name2-input").value = "";
             } else {
                 const name = document.getElementById("guest-name-input").value.trim();
                 if (!name) {
                     alert("Bitte gib einen Namen ein!");
                     return;
                 }
+                displayName = name;
                 fullLink = `${baseUrl}?name=${encodeURIComponent(name)}`;
+                
+                // Input leeren
+                document.getElementById("guest-name-input").value = "";
             }
 
             linkText.textContent = fullLink;
             copyBtn.textContent = "Kopieren";
             resultWrapper.classList.remove("hidden");
+
+            // In Firebase speichern
+            saveLinkToFirebase(displayName, fullLink);
+        }
+
+        async function generateBatchLinks() {
+            const textarea = document.getElementById("batch-names-input");
+            const text = textarea.value.trim();
+            if (!text) {
+                alert("Bitte gib mindestens einen Namen ein.");
+                return;
+            }
+
+            const lines = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+            if (lines.length === 0) {
+                alert("Bitte gib mindestens einen Namen ein.");
+                return;
+            }
+
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/';
+
+            const btn = document.querySelector(".batch-generate-btn");
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = "Erstelle Links...";
+
+            let createdCount = 0;
+
+            for (const line of lines) {
+                let fullLink = "";
+                let displayName = "";
+
+                if (line.includes(",")) {
+                    const parts = line.split(",").map(p => p.trim());
+                    const name1 = parts[0];
+                    const name2 = parts[1];
+                    if (name1 && name2) {
+                        displayName = `${name1} & ${name2} (Paar)`;
+                        fullLink = `${baseUrl}?name1=${encodeURIComponent(name1)}&name2=${encodeURIComponent(name2)}&guests=2`;
+                    } else {
+                        displayName = line;
+                        fullLink = `${baseUrl}?name=${encodeURIComponent(line)}`;
+                    }
+                } else {
+                    displayName = line;
+                    fullLink = `${baseUrl}?name=${encodeURIComponent(line)}`;
+                }
+
+                await saveLinkToFirebase(displayName, fullLink);
+                createdCount++;
+            }
+
+            textarea.value = "";
+            btn.disabled = false;
+            btn.textContent = originalText;
+            alert(`${createdCount} Link(s) erfolgreich erstellt und gespeichert!`);
         }
 
         function copyGeneratedLink() {
@@ -486,6 +711,72 @@
             });
         }
 
+        async function deleteLink(docId) {
+            if (confirm("Möchtest du diesen Link wirklich löschen?")) {
+                if (window.firebaseDB && window.firebaseDeleteDoc && window.firebaseDoc) {
+                    try {
+                        await window.firebaseDeleteDoc(window.firebaseDoc(window.firebaseDB, "invite_links", docId));
+                    } catch (e) {
+                        console.error("Fehler beim Löschen des Links:", e);
+                    }
+                }
+            }
+        }
+
+        async function clearAllLinks() {
+            if (confirm("Möchtest du WIRKLICH ALLE gespeicherten Links löschen? Dies kann nicht rückgängig gemacht werden.")) {
+                if (window.firebaseDB && window.firebaseDeleteDoc && window.firebaseDoc) {
+                    const tbody = document.getElementById("links-table-body");
+                    const buttons = tbody.querySelectorAll(".delete-link-btn");
+                    if (buttons.length === 0) {
+                        alert("Keine Links zum Löschen vorhanden.");
+                        return;
+                    }
+                    
+                    const originalText = document.querySelector(".clear-all-btn").textContent;
+                    const clearBtn = document.querySelector(".clear-all-btn");
+                    clearBtn.disabled = true;
+                    clearBtn.textContent = "Lösche...";
+
+                    for (const btn of buttons) {
+                        const docId = btn.getAttribute("data-id");
+                        try {
+                            await window.firebaseDeleteDoc(window.firebaseDoc(window.firebaseDB, "invite_links", docId));
+                        } catch (e) {
+                            console.error("Fehler beim Löschen:", e);
+                        }
+                    }
+                    
+                    clearBtn.disabled = false;
+                    clearBtn.textContent = originalText;
+                }
+            }
+        }
+
+        function filterLinks() {
+            const query = document.getElementById("search-links-input").value.toLowerCase().trim();
+            const rows = document.querySelectorAll("#links-table-body tr");
+            rows.forEach(row => {
+                if (row.classList.contains("no-links-row") || row.querySelector(".loading")) return;
+                const nameCol = row.querySelector("td");
+                if (nameCol) {
+                    const text = nameCol.textContent.toLowerCase();
+                    if (text.includes(query)) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                }
+            });
+        }
+
+        // Globale Exports für die Onclick-Handler in HTML
+        window.switchGeneratorTab = switchGeneratorTab;
+        window.generateBatchLinks = generateBatchLinks;
+        window.deleteLink = deleteLink;
+        window.clearAllLinks = clearAllLinks;
+        window.filterLinks = filterLinks;
+
         // Session prüfen
         document.addEventListener("DOMContentLoaded", () => {
             if (sessionStorage.getItem("admin_auth") === "true") {
@@ -498,7 +789,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         // Deine Firebase Konfiguration
         const firebaseConfig = {
@@ -513,6 +804,91 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Für globale Funktionen verfügbar machen
+        window.firebaseDB = db;
+        window.firebaseCollection = collection;
+        window.firebaseAddDoc = addDoc;
+        window.firebaseDeleteDoc = deleteDoc;
+        window.firebaseDoc = doc;
+        window.firebaseServerTimestamp = serverTimestamp;
+
+        // Echtzeit-Verbindung zu den Einladungs-Links (Live-Updates!)
+        const linksQuery = query(collection(db, "invite_links"), orderBy("timestamp", "desc"));
+        onSnapshot(linksQuery, (snapshot) => {
+            const tbody = document.getElementById("links-table-body");
+            tbody.innerHTML = ""; // leeren
+
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr class="no-links-row"><td colspan="3" class="loading" style="padding: 20px; text-align: center;">Keine gespeicherten Links vorhanden.</td></tr>';
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const tr = document.createElement("tr");
+
+                // Name
+                const tdName = document.createElement("td");
+                tdName.style.padding = "12px 15px";
+                tdName.style.borderBottom = "1px solid var(--border-color)";
+                tdName.style.fontSize = "0.85rem";
+                tdName.style.fontWeight = "500";
+                tdName.textContent = data.name || "Unbekannt";
+                tr.appendChild(tdName);
+
+                // Link
+                const tdLink = document.createElement("td");
+                tdLink.style.padding = "12px 15px";
+                tdLink.style.borderBottom = "1px solid var(--border-color)";
+                tdLink.style.fontSize = "0.8rem";
+                tdLink.style.wordBreak = "break-all";
+                
+                const aLink = document.createElement("a");
+                aLink.href = data.url;
+                aLink.target = "_blank";
+                aLink.textContent = data.url;
+                aLink.style.color = "#444";
+                tdLink.appendChild(aLink);
+                tr.appendChild(tdLink);
+
+                // Aktionen
+                const tdActions = document.createElement("td");
+                tdActions.style.padding = "12px 15px";
+                tdActions.style.borderBottom = "1px solid var(--border-color)";
+                tdActions.style.textAlign = "center";
+                tdActions.style.whiteSpace = "nowrap";
+
+                // Kopieren-Button
+                const copyBtn = document.createElement("button");
+                copyBtn.textContent = "Kopieren";
+                copyBtn.className = "action-btn";
+                copyBtn.style.marginRight = "5px";
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(data.url).then(() => {
+                        copyBtn.textContent = "Kopiert!";
+                        setTimeout(() => { copyBtn.textContent = "Kopieren"; }, 1500);
+                    });
+                };
+                tdActions.appendChild(copyBtn);
+
+                // Löschen-Button
+                const delBtn = document.createElement("button");
+                delBtn.textContent = "Löschen";
+                delBtn.className = "action-btn danger delete-link-btn";
+                delBtn.setAttribute("data-id", docSnap.id);
+                delBtn.onclick = () => window.deleteLink(docSnap.id);
+                tdActions.appendChild(delBtn);
+
+                tr.appendChild(tdActions);
+                tbody.appendChild(tr);
+            });
+
+            // Falls die Suche aktiv ist, Filter direkt anwenden
+            if (typeof window.filterLinks === "function") {
+                window.filterLinks();
+            }
+        });
 
         // Echtzeit-Verbindung zur Datenbank (Live-Updates!)
         const q = query(collection(db, "rsvps"), orderBy("timestamp", "desc"));
